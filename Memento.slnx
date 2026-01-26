@@ -1,0 +1,11 @@
+<Solution>
+  <Folder Name="/src/">
+    <Project Path="./src/Memento.API/Memento.API.csproj" />
+    <Project Path="./src/Memento.Domain/Memento.Domain.csproj" />
+    <Project Path="./src/Memento.Infrastructure/Memento.Infrastructure.csproj" />
+    <Project Path="./src/Memento.Services/Memento.Services.csproj" />
+  </Folder>
+
+  <Folder Name="/tests/">
+  </Folder>
+</Solution>
