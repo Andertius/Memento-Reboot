@@ -1,0 +1,61 @@
+services:
+  memento.api:
+    image: mementoapi
+    container_name: memento.api
+    build:
+      context: src/API
+      dockerfile: Dockerfile
+    ports:
+      - "5295:5295"
+    depends_on:
+      - memento.api.database
+    environment:
+      ASPNETCORE_HTTP_PORTS: 5295
+      ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY}
+      ConnectionStrings__Database: ${API_DATABASE_CONNECTION_STRING}
+
+  memento.auth:
+    image: mementoauth
+    container_name: memento.auth
+    build:
+      context: src/Auth
+      dockerfile: Dockerfile
+    ports:
+      - "5091:5091"
+    depends_on:
+      - memento.auth.database
+    environment:
+      ASPNETCORE_HTTP_PORTS: 5091
+      ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
+      Jwt__SigningKey: ${JWT_SIGNING_KEY}
+      Jwt__Issuer: ${JWT_ISSUER}
+      Jwt__Audience: ${JWT_AUDIENCE}
+      ConnectionStrings__Database: ${AUTH_DATABASE_CONNECTION_STRING}
+
+  memento.api.database:
+    image: postgres:latest
+    container_name: memento.api.database
+    environment:
+      - POSTGRES_DB=cards
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${API_DB_PASSWORD}
+    volumes:
+      - api-data:/var/lib/postgresql
+    ports:
+      - 5434:5432
+
+  memento.auth.database:
+    image: postgres:latest
+    container_name: memento.auth.database
+    environment:
+      - POSTGRES_DB=identity
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=${AUTH_DB_PASSWORD}
+    volumes:
+      - auth-data:/var/lib/postgresql
+    ports:
+      - 5433:5432
+volumes:
+  api-data:
+  auth-data:
