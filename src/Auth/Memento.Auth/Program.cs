@@ -1,4 +1,3 @@
-using System;
 using FastEndpoints;
 using Memento.Auth.Database;
 using Memento.Auth.Extensions;

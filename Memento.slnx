@@ -10,6 +10,7 @@
     <Project Path="./src/Auth/Memento.Auth/Memento.Auth.csproj" />
   </Folder>
 
-  <Folder Name="/tests/">
+  <Folder Name="/tests/auth/">
+    <Project Path="./tests/Auth/Memento.Auth.Tests.Integration/Memento.Auth.Tests.Integration.csproj" />
   </Folder>
 </Solution>

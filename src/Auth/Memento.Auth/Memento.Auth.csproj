@@ -17,4 +17,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUi" Version="10.1.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="..\..\..\tests\Auth\Memento.Auth.Tests.Integration\Memento.Auth.Tests.Integration.csproj" />
+  </ItemGroup>
 </Project>

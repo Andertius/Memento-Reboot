@@ -8,7 +8,10 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Memento.Auth.Endpoints.CreateUser;
 
-public sealed class CreateUserEndpoint(AuthorizationDbContext context, UserManager<IdentityUser> userManager, RoleManager<IdentityRole> roleManager) : Endpoint<CreateUserRequest>
+public sealed class CreateUserEndpoint(
+    AuthorizationDbContext context,
+    UserManager<IdentityUser> userManager,
+    RoleManager<IdentityRole> roleManager) : Endpoint<CreateUserRequest>
 {
     private readonly AuthorizationDbContext _context = context ?? throw new ArgumentNullException("Db Context must not be null", nameof(context));
     private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException("User Manager must not be null", nameof(userManager));

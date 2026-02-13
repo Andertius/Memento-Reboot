@@ -14,7 +14,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Memento.Auth.Endpoints.Token;
 
-public sealed class TokenEndpoint(UserManager<IdentityUser> userManager, IOptions<JwtOptions> jwtOptions) : Endpoint<TokenRequest>
+public sealed class TokenEndpoint(UserManager<IdentityUser> userManager, IOptions<JwtOptions> jwtOptions) : Endpoint<TokenRequest, TokenResponse>
 {
     private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException("User manager must not be null", nameof(userManager));
     private readonly JwtOptions _jwtOptions = jwtOptions.Value;
@@ -58,6 +58,6 @@ public sealed class TokenEndpoint(UserManager<IdentityUser> userManager, IOption
         var handler = new JsonWebTokenHandler();
         string accessToken = handler.CreateToken(tokenDescriptor);
 
-        await Send.OkAsync(new { accessToken });
+        await Send.OkAsync(new() { AccessToken = accessToken });
     }
 }
