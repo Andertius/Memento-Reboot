@@ -1,9 +1,13 @@
 <Solution>
-  <Folder Name="/src/">
-    <Project Path="./src/Memento.API/Memento.API.csproj" />
-    <Project Path="./src/Memento.Domain/Memento.Domain.csproj" />
-    <Project Path="./src/Memento.Infrastructure/Memento.Infrastructure.csproj" />
-    <Project Path="./src/Memento.Services/Memento.Services.csproj" />
+  <Folder Name="/src/api/">
+      <Project Path="./src/API/Memento.API/Memento.API.csproj" />
+      <Project Path="./src/API/Memento.Domain/Memento.Domain.csproj" />
+      <Project Path="./src/API/Memento.Infrastructure/Memento.Infrastructure.csproj" />
+      <Project Path="./src/API/Memento.Services/Memento.Services.csproj" />
+  </Folder>
+
+  <Folder Name="/src/auth/">
+    <Project Path="./src/Auth/Memento.Auth/Memento.Auth.csproj" />
   </Folder>
 
   <Folder Name="/tests/">
