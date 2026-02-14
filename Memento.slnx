@@ -1,7 +1,16 @@
 <Solution>
+  <Folder Name="/docker/">
+    <File Path="docker\.dockerignore" />
+    <File Path="docker\.env.sample" />
+    <File Path="docker\docker-compose.yml" />
+    <File Path="docker\envs\.env" />
+    <File Path="docker\envs\.env.dev" />
+    <File Path="docker\envs\.env.prod" />
+    <File Path="docker\run.sh" />
+  </Folder>
+  <Folder Name="/src/" />
   <Folder Name="/src/api/">
       <Project Path="./src/API/Memento.API/Memento.API.csproj" />
-      <Project Path="./src/API/Memento.Domain/Memento.Domain.csproj" />
       <Project Path="./src/API/Memento.Infrastructure/Memento.Infrastructure.csproj" />
       <Project Path="./src/API/Memento.Services/Memento.Services.csproj" />
   </Folder>
@@ -9,6 +18,7 @@
   <Folder Name="/src/auth/">
     <Project Path="./src/Auth/Memento.Auth/Memento.Auth.csproj" />
   </Folder>
+
 
   <Folder Name="/tests/auth/">
     <Project Path="./tests/Auth/Memento.Auth.Tests.Integration/Memento.Auth.Tests.Integration.csproj" />

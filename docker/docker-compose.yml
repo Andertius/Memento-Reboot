@@ -3,7 +3,7 @@ services:
     image: mementoapi
     container_name: memento.api
     build:
-      context: src/API
+      context: ../src/API
       dockerfile: Dockerfile
     ports:
       - "5295:5295"
@@ -19,7 +19,7 @@ services:
     image: mementoauth
     container_name: memento.auth
     build:
-      context: src/Auth
+      context: ../src/Auth
       dockerfile: Dockerfile
     ports:
       - "5091:5091"
