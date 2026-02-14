@@ -3,13 +3,13 @@ using System.Threading.Tasks;
 using Memento.Auth.Database;
 using Microsoft.AspNetCore.Identity;
 
-namespace Memento.Auth.Tests.Integration.TokenEndpointTests;
+namespace Memento.Auth.Tests.Integration.Token;
 
 public sealed class DataSeeder(AuthorizationDbContext _dbContext, UserManager<IdentityUser> _userManager, RoleManager<IdentityRole> _roleManager)
 {
     public async Task SeedAsync()
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
         var user = new IdentityUser { UserName = "test" };
 
         var result = await _userManager.CreateAsync(user, "test");
@@ -33,7 +33,7 @@ public sealed class DataSeeder(AuthorizationDbContext _dbContext, UserManager<Id
 
     public async Task UnseedAsync()
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
         var user = await _userManager.FindByNameAsync("test");
 

@@ -1,4 +1,4 @@
-namespace Memento.API.Endpoints.Cards.RemoveCategory;
+namespace Memento.API.Endpoints.Categories.RemoveCategory;
 
 public sealed class RemoveCategoryRequest
 {

@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Memento.Domain.Models;
 using Memento.Infrastructure.Repositories;
 using Memento.Services.Mappers;
+using Memento.Services.Models;
 
 namespace Memento.Services.Services;
 
@@ -20,7 +20,7 @@ public interface ICategoryService
 
 public sealed class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
 {
-    private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException("Category Repository must not be null", nameof(categoryRepository));
+    private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository), "Category Repository must not be null");
     private readonly CategoryMapper _categoryMapper = new();
 
     public async Task<Category[]> GetAllCategories()

@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Tags.GetTagById;
 
 public sealed class GetTagByIdEndpoint(ITagService tagService) : Endpoint<GetTagByIdRequest>
 {
-    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException("Tag Service must not be null", nameof(tagService));
+    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService), "Tag Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class GetTagByIdEndpoint(ITagService tagService) : Endpoint<GetTag
     public override async Task HandleAsync(GetTagByIdRequest request, CancellationToken token)
     {
         var tags = await _tagService.GetTagById(request.Id);
-        await Send.OkAsync(tags);
+        await Send.OkAsync(tags, cancellation: token);
     }
 }

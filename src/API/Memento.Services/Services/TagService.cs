@@ -2,9 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Memento.Domain.Models;
 using Memento.Infrastructure.Repositories;
 using Memento.Services.Mappers;
+using Memento.Services.Models;
 
 namespace Memento.Services.Services;
 
@@ -22,7 +22,7 @@ public interface ITagService
 
 public sealed class TagService(ITagRepository tagRepository) : ITagService
 {
-    private readonly ITagRepository _tagRepository = tagRepository ?? throw new ArgumentNullException("Tag Repository must not be null", nameof(tagRepository));
+    private readonly ITagRepository _tagRepository = tagRepository ?? throw new ArgumentNullException(nameof(tagRepository), "Tag Repository must not be null");
     private readonly TagMapper _tagMapper = new();
 
     public async Task<Tag[]> GetAllTags()

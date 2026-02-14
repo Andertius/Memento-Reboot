@@ -18,7 +18,7 @@ public interface ICardRepository
 
 public sealed class CardRepository(CardDbContext context) : ICardRepository
 {
-    private readonly CardDbContext _context = context ?? throw new ArgumentNullException("Card DbContext must not be null", nameof(context));
+    private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
     public Task<CardEntity[]> GetAllCards()
         => _context

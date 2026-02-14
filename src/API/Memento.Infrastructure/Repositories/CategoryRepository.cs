@@ -20,7 +20,7 @@ public interface ICategoryRepository
 
 public sealed class CategoryRepository(CardDbContext context) : ICategoryRepository
 {
-    private readonly CardDbContext _context = context ?? throw new ArgumentNullException("Card DbContext must not be null", nameof(context));
+    private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
     public Task<CategoryEntity[]> GetAllCategories()
         => _context

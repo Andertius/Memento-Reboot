@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Tags.RemoveTag;
 
 public sealed class RemoveTagEndpoint(ITagService tagService) : Endpoint<RemoveTagRequest>
 {
-    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException("Tag Service must not be null", nameof(tagService));
+    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService), "Tag Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class RemoveTagEndpoint(ITagService tagService) : Endpoint<RemoveT
     public override async Task HandleAsync(RemoveTagRequest request, CancellationToken token)
     {
         await _tagService.RemoveTag(request.Id);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

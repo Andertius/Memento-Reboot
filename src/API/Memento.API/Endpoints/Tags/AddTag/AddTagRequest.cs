@@ -1,5 +1,5 @@
 using Memento.API.Interfaces;
-using Memento.Domain.Models;
+using Memento.Services.Models;
 
 namespace Memento.API.Endpoints.Tags.AddTag;
 

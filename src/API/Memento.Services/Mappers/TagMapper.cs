@@ -1,6 +1,6 @@
-using Riok.Mapperly.Abstractions;
-using Memento.Domain.Models;
 using Memento.Infrastructure.Entities;
+using Memento.Services.Models;
+using Riok.Mapperly.Abstractions;
 
 namespace Memento.Services.Mappers;
 

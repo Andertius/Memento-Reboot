@@ -11,7 +11,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Memento.Domain\Memento.Domain.csproj" />
     <ProjectReference Include="..\Memento.Infrastructure\Memento.Infrastructure.csproj" />
   </ItemGroup>
 

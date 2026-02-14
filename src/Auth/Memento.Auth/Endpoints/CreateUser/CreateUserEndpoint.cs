@@ -13,9 +13,9 @@ public sealed class CreateUserEndpoint(
     UserManager<IdentityUser> userManager,
     RoleManager<IdentityRole> roleManager) : Endpoint<CreateUserRequest>
 {
-    private readonly AuthorizationDbContext _context = context ?? throw new ArgumentNullException("Db Context must not be null", nameof(context));
-    private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException("User Manager must not be null", nameof(userManager));
-    private readonly RoleManager<IdentityRole> _roleManager = roleManager ?? throw new ArgumentNullException("User Manager must not be null", nameof(roleManager));
+    private readonly AuthorizationDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Db Context must not be null");
+    private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "User Manager must not be null");
+    private readonly RoleManager<IdentityRole> _roleManager = roleManager ?? throw new ArgumentNullException(nameof(roleManager), "User Manager must not be null");
 
     public override void Configure()
     {
@@ -49,7 +49,7 @@ public sealed class CreateUserEndpoint(
             return;
         }
 
-        await transaction.CommitAsync();
-        await Send.OkAsync();
+        await transaction.CommitAsync(token);
+        await Send.OkAsync(cancellation: token);
     }
 }

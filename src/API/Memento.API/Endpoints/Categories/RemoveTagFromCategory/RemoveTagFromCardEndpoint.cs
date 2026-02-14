@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.Services.Services;
 
-namespace Memento.API.Endpoints.Cards.RemoveTagFromCategory;
+namespace Memento.API.Endpoints.Categories.RemoveTagFromCategory;
 
 public sealed class RemoveTagFromCategoryEndpoint(ITagService tagService) : Endpoint<RemoveTagFromCategoryRequest>
 {
-    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException("Tag Service must not be null", nameof(tagService));
+    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService), "Tag Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class RemoveTagFromCategoryEndpoint(ITagService tagService) : Endp
     public override async Task HandleAsync(RemoveTagFromCategoryRequest request, CancellationToken token)
     {
         await _tagService.RemoveTagFromCategory(request.TagId, request.CategoryId);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

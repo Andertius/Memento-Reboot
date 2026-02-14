@@ -18,8 +18,11 @@ public sealed class CardDbContext(DbContextOptions<CardDbContext> options) : DbC
         modelBuilder.Entity<CardEntity>(entityBuilder =>
         {
             entityBuilder.HasKey(x => x.Id);
-            entityBuilder.Property(x => x.Word).IsRequired();
-            entityBuilder.Property(x => x.Definition).IsRequired();
+            entityBuilder.Property(x => x.Word).IsRequired().HasMaxLength(256);
+            entityBuilder.Property(x => x.Translation).IsRequired().HasMaxLength(256);
+            entityBuilder.Property(x => x.Definition).HasMaxLength(256);
+            entityBuilder.Property(x => x.Hint).HasMaxLength(256);
+            entityBuilder.Property(x => x.Image).HasMaxLength(512);
 
             entityBuilder
                 .HasMany(x => x.Categories)
@@ -33,8 +36,9 @@ public sealed class CardDbContext(DbContextOptions<CardDbContext> options) : DbC
         modelBuilder.Entity<CategoryEntity>(entityBuilder =>
         {
             entityBuilder.HasKey(x => x.Id);
-            entityBuilder.Property(x => x.Name).IsRequired();
-            entityBuilder.Property(x => x.Description).IsRequired();
+            entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(256);
+            entityBuilder.Property(x => x.Description).IsRequired().HasMaxLength(256);
+            entityBuilder.Property(x => x.Image).HasMaxLength(512);
 
             entityBuilder
                 .HasMany(x => x.Tags)
@@ -44,7 +48,7 @@ public sealed class CardDbContext(DbContextOptions<CardDbContext> options) : DbC
         modelBuilder.Entity<TagEntity>(entityBuilder =>
         {
             entityBuilder.HasKey(x => x.Id);
-            entityBuilder.Property(x => x.Name).IsRequired();
+            entityBuilder.Property(x => x.Name).IsRequired().HasMaxLength(256);
         });
     }
 }

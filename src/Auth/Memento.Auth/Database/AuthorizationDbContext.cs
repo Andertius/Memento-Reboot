@@ -4,10 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Memento.Auth.Database;
 
-public sealed class AuthorizationDbContext : IdentityDbContext<IdentityUser>
+public sealed class AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options)
+    : IdentityDbContext<IdentityUser>(options)
 {
-    public AuthorizationDbContext(DbContextOptions<AuthorizationDbContext> options)
-        : base(options)
-    {
-    }
 }

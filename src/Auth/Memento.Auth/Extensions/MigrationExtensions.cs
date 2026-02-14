@@ -11,7 +11,7 @@ public static class MigrationExtensions
     public static async Task ApplyMigrations(this IApplicationBuilder app)
     {
         await using var scope = app.ApplicationServices.CreateAsyncScope();
-        using var context = scope.ServiceProvider.GetRequiredService<AuthorizationDbContext>();
+        await using var context = scope.ServiceProvider.GetRequiredService<AuthorizationDbContext>();
 
         await context.Database.MigrateAsync();
     }

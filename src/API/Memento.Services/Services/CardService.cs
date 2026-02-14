@@ -1,9 +1,9 @@
 using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Memento.Domain.Models;
 using Memento.Infrastructure.Repositories;
 using Memento.Services.Mappers;
+using Memento.Services.Models;
 
 namespace Memento.Services.Services;
 
@@ -18,7 +18,7 @@ public interface ICardService
 
 public sealed class CardService(ICardRepository cardRepository) : ICardService
 {
-    private readonly ICardRepository _cardRepository = cardRepository ?? throw new ArgumentNullException("Card Repository must not be null", nameof(cardRepository));
+    private readonly ICardRepository _cardRepository = cardRepository ?? throw new ArgumentNullException(nameof(cardRepository), "Card Repository must not be null");
     private readonly CardMapper _cardMapper = new();
 
     public async Task<Card[]> GetAllCards()

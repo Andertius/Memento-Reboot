@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Categories.RemoveCardFromCategory;
 
 public sealed class RemoveCardFromCategoryEndpoint(ICategoryService categoryService) : Endpoint<RemoveCardFromCategoryRequest>
 {
-    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException("Category Service must not be null", nameof(categoryService));
+    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService), "Category Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class RemoveCardFromCategoryEndpoint(ICategoryService categoryServ
     public override async Task HandleAsync(RemoveCardFromCategoryRequest request, CancellationToken token)
     {
         await _categoryService.RemoveCardFromCategory(request.CategoryId, request.CardId);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

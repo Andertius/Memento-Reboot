@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Memento.API.Endpoints.Cards.AddTagsToCategory;
+namespace Memento.API.Endpoints.Categories.AddTagsToCategory;
 
 public sealed class AddTagsToCategoryRequest
 {

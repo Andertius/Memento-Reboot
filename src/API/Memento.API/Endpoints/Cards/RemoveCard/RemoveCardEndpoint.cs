@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Cards.RemoveCard;
 
 public sealed class RemoveCardEndpoint(ICardService cardService) : Endpoint<RemoveCardRequest>
 {
-    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException("Card Service must not be null", nameof(cardService));
+    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException(nameof(cardService), "Card Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class RemoveCardEndpoint(ICardService cardService) : Endpoint<Remo
     public override async Task HandleAsync(RemoveCardRequest request, CancellationToken token)
     {
         await _cardService.RemoveCard(request.Id);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

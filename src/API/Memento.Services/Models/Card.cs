@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Memento.Domain.Models;
+namespace Memento.Services.Models;
 
 public sealed class Card
 {

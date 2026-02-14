@@ -2,13 +2,13 @@ using System.Threading.Tasks;
 using Memento.Auth.Database;
 using Microsoft.AspNetCore.Identity;
 
-namespace Memento.Auth.Tests.Integration.CreateUserEndpointTests;
+namespace Memento.Auth.Tests.Integration.CreateUser;
 
 public sealed class DataSeeder(AuthorizationDbContext _dbContext, UserManager<IdentityUser> _userManager, RoleManager<IdentityRole> _roleManager)
 {
     public async Task UnseedAsync()
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync();
+        await using var transaction = await _dbContext.Database.BeginTransactionAsync();
 
         var user = await _userManager.FindByNameAsync("test");
 

@@ -6,9 +6,9 @@ using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.GetCardById;
 
-public sealed class GetCardByIdndpoint(ICardService cardService) : Endpoint<GetCardByIdRequest>
+public sealed class GetCardByIdEndpoint(ICardService cardService) : Endpoint<GetCardByIdRequest>
 {
-    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException("Card Service must not be null", nameof(cardService));
+    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException(nameof(cardService), "Card Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class GetCardByIdndpoint(ICardService cardService) : Endpoint<GetC
     public override async Task HandleAsync(GetCardByIdRequest request, CancellationToken token)
     {
         var card = await _cardService.GetById(request.Id);
-        await Send.OkAsync(card);
+        await Send.OkAsync(card, cancellation: token);
     }
 }

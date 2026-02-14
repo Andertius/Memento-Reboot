@@ -22,7 +22,7 @@ public interface ITagRepository
 
 public sealed class TagRepository(CardDbContext context) : ITagRepository
 {
-    private readonly CardDbContext _context = context ?? throw new ArgumentNullException("Card DbContext must not be null", nameof(context));
+    private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
     public Task<TagEntity[]> GetAllTags()
         => _context

@@ -1,4 +1,3 @@
-using System.Linq;
 using System.Threading.Tasks;
 using FastEndpoints;
 using FastEndpoints.Testing;
@@ -10,16 +9,16 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Xunit;
 
-namespace Memento.Auth.Tests.Integration.CreateUserEndpointTests;
+namespace Memento.Auth.Tests.Integration.CreateUser;
 
 [Collection<AuthCollection>]
-public sealed class IntegrationTests : TestBase<AuthApp>
+public sealed class CreateUserEndpointTests : TestBase<AuthApp>
 {
     private readonly AuthApp _app;
     private readonly DataSeeder _seeder;
     private readonly AuthorizationDbContext _dbContext;
 
-    public IntegrationTests(AuthApp app)
+    public CreateUserEndpointTests(AuthApp app)
     {
         _app = app;
 

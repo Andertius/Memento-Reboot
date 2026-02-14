@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.Services.Services;
 
-namespace Memento.API.Endpoints.Cards.AddTagsToCategory;
+namespace Memento.API.Endpoints.Categories.AddTagsToCategory;
 
 public sealed class AddTagsToCategoryEndpoint(ITagService tagService) : Endpoint<AddTagsToCategoryRequest>
 {
-    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException("Tag Service must not be null", nameof(tagService));
+    private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService), "Tag Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class AddTagsToCategoryEndpoint(ITagService tagService) : Endpoint
     public override async Task HandleAsync(AddTagsToCategoryRequest request, CancellationToken token)
     {
         await _tagService.AddTagsToCategory(request.CategoryId, request.TagIds);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

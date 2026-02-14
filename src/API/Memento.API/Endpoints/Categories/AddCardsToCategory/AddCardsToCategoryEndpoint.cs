@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Categories.AddCardsToCategory;
 
 public sealed class AddCardsToCategoryEndpoint(ICategoryService categoryService) : Endpoint<AddCardsToCategoryRequest>
 {
-    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException("Category Service must not be null", nameof(categoryService));
+    private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService), "Category Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class AddCardsToCategoryEndpoint(ICategoryService categoryService)
     public override async Task HandleAsync(AddCardsToCategoryRequest request, CancellationToken token)
     {
         await _categoryService.AddCardsToCategory(request.CategoryId, request.CardIds);
-        await Send.OkAsync();
+        await Send.OkAsync(cancellation: token);
     }
 }

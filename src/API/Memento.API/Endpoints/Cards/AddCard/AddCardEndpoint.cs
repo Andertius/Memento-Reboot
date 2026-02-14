@@ -8,7 +8,7 @@ namespace Memento.API.Endpoints.Cards.AddCard;
 
 public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCardRequest>
 {
-    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException("Card Service must not be null", nameof(cardService));
+    private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException(nameof(cardService), "Card Service must not be null");
 
     public override void Configure()
     {
@@ -19,6 +19,6 @@ public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCard
     public override async Task HandleAsync(AddCardRequest request, CancellationToken token)
     {
         int id = await _cardService.AddCard(request.ToModel());
-        await Send.CreatedAtAsync($"/api/cards/{id}");
+        await Send.CreatedAtAsync($"/api/cards/{id}", cancellation: token);
     }
 }
