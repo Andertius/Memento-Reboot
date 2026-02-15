@@ -1,0 +1,59 @@
+using System.Threading.Tasks;
+using FakeItEasy;
+using Memento.Infrastructure.Entities;
+using Memento.Infrastructure.Repositories;
+using Memento.Services.Services;
+using Xunit;
+
+namespace Memento.Services.Tests.Unit.CardServiceTests;
+
+public sealed class CardServiceGetByIdTests
+{
+    [Fact]
+    public async Task Should_map_and_return_card_when_found()
+    {
+        // Arrange
+        var cardEntity = new CardEntity
+        {
+            Id = 1,
+            Word = "Word",
+            Translation = "Translation",
+            Definition = "Definition",
+            Hint = "Hint",
+            Image = "Image",
+        };
+
+        var repository = A.Fake<ICardRepository>();
+        A.CallTo(() => repository.GetById(1)).Returns(cardEntity);
+
+        var sevice = new CardService(repository);
+
+        // Act
+        var card = await sevice.GetById(1);
+
+        // Assert
+        Assert.NotNull(card);
+        Assert.Equal(cardEntity.Id, card.Id);
+        Assert.Equal(cardEntity.Word, card.Word);
+        Assert.Equal(cardEntity.Translation, card.Translation);
+        Assert.Equal(cardEntity.Definition, card.Definition);
+        Assert.Equal(cardEntity.Hint, card.Hint);
+        Assert.Equal(cardEntity.Image, card.Image);
+    }
+    
+    [Fact]
+    public async Task Should_return_null_when_not_found()
+    {
+        // Arrange
+        var repository = A.Fake<ICardRepository>();
+        A.CallTo(() => repository.GetById(1)).Returns<CardEntity?>(null);
+
+        var sevice = new CardService(repository);
+
+        // Act
+        var card = await sevice.GetById(1);
+
+        // Assert
+        Assert.Null(card);
+    }
+}
