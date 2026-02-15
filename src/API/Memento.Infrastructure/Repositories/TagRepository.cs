@@ -13,6 +13,7 @@ public interface ITagRepository
     Task<TagEntity[]> GetAllTags();
     Task<int> AddTag(TagEntity entity);
     Task<TagEntity?> GetById(int id);
+    Task<TagEntity?> GetByName(string? name);
     Task RemoveTag(int id);
     Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds);
     Task RemoveTagFromCard(int tagId, int cardId);
@@ -42,6 +43,12 @@ public sealed class TagRepository(CardDbContext context) : ITagRepository
             .Tags
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Id == id);
+
+    public Task<TagEntity?> GetByName(string? name)
+        => _context
+            .Tags
+            .AsNoTracking()
+            .FirstOrDefaultAsync(x => x.Name == name);
 
     public async Task RemoveTag(int id)
     {

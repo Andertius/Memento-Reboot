@@ -19,6 +19,15 @@ public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endp
     public override async Task HandleAsync(AddCategoryRequest request, CancellationToken token)
     {
         int id = await _categoryService.AddCategory(request.ToModel());
+
+        if (id == 0)
+        {
+            AddError("Could not add category as it already exists");
+            await Send.ErrorsAsync(cancellation: token);
+
+            return;
+        }
+
         await Send.CreatedAtAsync($"/api/categories/{id}", cancellation: token);
     }
 }

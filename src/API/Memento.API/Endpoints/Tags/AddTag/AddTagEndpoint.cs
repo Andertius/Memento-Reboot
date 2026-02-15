@@ -19,6 +19,15 @@ public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagRequ
     public override async Task HandleAsync(AddTagRequest request, CancellationToken token)
     {
         int id = await _tagService.AddTag(request.ToModel());
+
+        if (id == 0)
+        {
+            AddError("Could not add tag as it already exists");
+            await Send.ErrorsAsync(cancellation: token);
+
+            return;
+        }
+
         await Send.CreatedAtAsync($"/api/categories/{id}", cancellation: token);
     }
 }

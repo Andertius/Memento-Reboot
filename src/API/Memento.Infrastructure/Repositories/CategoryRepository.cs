@@ -13,6 +13,7 @@ public interface ICategoryRepository
     Task<CategoryEntity[]> GetAllCategories();
     Task<int> AddCard(CategoryEntity entity);
     Task<CategoryEntity?> GetById(int id);
+    Task<CategoryEntity?> GetByName(string? name);
     Task RemoveCategory(int id);
     Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds);
     Task RemoveCardFromCategory(int categoryId, int cardId);
@@ -48,6 +49,13 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Id == id);
 
+    public Task<CategoryEntity?> GetByName(string? name)
+        => _context
+            .Categories
+            .AsNoTracking()
+            .Include(x => x.Tags)
+            .FirstOrDefaultAsync(x => x.Name == name);
+    
     public async Task RemoveCategory(int id)
     {
         var category = await _context

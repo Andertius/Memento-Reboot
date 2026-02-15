@@ -12,6 +12,7 @@ public interface ITagService
 {
     Task<Tag[]> GetAllTags();
     Task<Tag?> GetTagById(int id);
+    Task<Tag?> GetTagByName(string name);
     Task<int> AddTag(Tag tag);
     Task RemoveTag(int id);
     Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds);
@@ -40,8 +41,24 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
             : _tagMapper.MapTagEntityToTag(entity);
     }
 
+    public async Task<Tag?> GetTagByName(string name)
+    {
+        var entity = await _tagRepository.GetByName(name);
+
+        return entity is null
+            ? null
+            : _tagMapper.MapTagEntityToTag(entity);
+    }
+
     public async Task<int> AddTag(Tag tag)
     {
+        var existing = await _tagRepository.GetByName(tag.Name);
+
+        if (existing is not null)
+        {
+            return 0;
+        }
+
         var tagEntity = _tagMapper.MapTagToTagEntity(tag);
         return await _tagRepository.AddTag(tagEntity);
     }

@@ -43,7 +43,7 @@ services:
     volumes:
       - api-data:/var/lib/postgresql
     ports:
-      - 5434:5432
+      - "5434:5432"
 
   memento.auth.database:
     image: postgres:latest
@@ -55,7 +55,7 @@ services:
     volumes:
       - auth-data:/var/lib/postgresql
     ports:
-      - 5433:5432
+      - "5433:5432"
 volumes:
   api-data:
   auth-data:

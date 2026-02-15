@@ -13,6 +13,7 @@ public interface ICategoryService
     Task<Category[]> GetAllCategories();
     Task<int> AddCategory(Category category);
     Task<Category?> GetById(int id);
+    Task<Category?> GetByName(string name);
     Task RemoveCategory(int id);
     Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds);
     Task RemoveCardFromCategory(int categoryId, int cardId);
@@ -31,6 +32,13 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
 
     public async Task<int> AddCategory(Category category)
     {
+        var existing = await _categoryRepository.GetByName(category.Name);
+
+        if (existing is not null)
+        {
+            return 0;
+        }
+
         var categoryEntity = _categoryMapper.MapCategoryToCategoryEntity(category);
         return await _categoryRepository.AddCard(categoryEntity);
     }
@@ -38,6 +46,15 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     public async Task<Category?> GetById(int id)
     {
         var category = await _categoryRepository.GetById(id);
+
+        return category is null
+            ? null
+            : _categoryMapper.MapCategoryEntityToCategory(category);
+    }
+
+    public async Task<Category?> GetByName(string name)
+    {
+        var category = await _categoryRepository.GetByName(name);
 
         return category is null
             ? null

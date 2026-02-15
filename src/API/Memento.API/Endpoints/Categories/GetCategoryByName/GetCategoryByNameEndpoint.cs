@@ -4,21 +4,21 @@ using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.Services.Services;
 
-namespace Memento.API.Endpoints.Categories.GetCategoryById;
+namespace Memento.API.Endpoints.Categories.GetCategoryByName;
 
-public sealed class GetCategoryByIdEndpoint(ICategoryService categoryService) : Endpoint<GetCategoryByIdRequest>
+public sealed class GetCategoryByNameEndpoint(ICategoryService categoryService) : Endpoint<GetCategoryByNameRequest>
 {
     private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService), "Category Service must not be null");
 
     public override void Configure()
     {
-        Get("/api/categories/{Id}");
+        Get("/api/categories/name/{Name}");
         Roles("Learner");
     }
 
-    public override async Task HandleAsync(GetCategoryByIdRequest request, CancellationToken token)
+    public override async Task HandleAsync(GetCategoryByNameRequest request, CancellationToken token)
     {
-        var card = await _categoryService.GetById(request.Id);
+        var card = await _categoryService.GetByName(request.Name);
         await Send.OkAsync(card, cancellation: token);
     }
 }
