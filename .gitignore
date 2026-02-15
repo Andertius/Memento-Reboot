@@ -19,10 +19,10 @@ bld/
 #wwwroot/
 
 # Docker .env files
-envs/
+docker/envs/
 
-# Run application script
-run.sh
+# Convenient scripts folder
+scripts/
 
 # Build Results of an ATL Project
 [Dd]ebugPS/

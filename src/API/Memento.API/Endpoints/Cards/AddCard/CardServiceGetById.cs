@@ -6,7 +6,7 @@ using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.AddCard;
 
-public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCardRequest>
+public sealed class CardServiceGetById(ICardService cardService) : Endpoint<AddCardRequest>
 {
     private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException(nameof(cardService), "Card Service must not be null");
 

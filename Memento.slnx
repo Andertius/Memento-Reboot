@@ -6,8 +6,15 @@
     <File Path="docker\envs\.env" />
     <File Path="docker\envs\.env.dev" />
     <File Path="docker\envs\.env.prod" />
-    <File Path="docker\run.sh" />
   </Folder>
+
+  <Folder Name="/_solutionitems/">
+    <File Path=".gitignore" />
+    <File Path="scripts\add-migration.sh" />
+    <File Path="scripts\remove-migration.sh" />
+    <File Path="scripts\run.sh" />
+  </Folder>
+
   <Folder Name="/src/" />
   <Folder Name="/src/api/">
       <Project Path="./src/API/Memento.API/Memento.API.csproj" />

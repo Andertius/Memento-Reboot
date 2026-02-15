@@ -35,12 +35,9 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
     {
         var entity = await _tagRepository.GetById(id);
 
-        if (entity is null)
-        {
-            return null;
-        }
-
-        return _tagMapper.MapTagEntityToTag(entity);
+        return entity is null
+            ? null
+            : _tagMapper.MapTagEntityToTag(entity);
     }
 
     public async Task<int> AddTag(Tag tag)

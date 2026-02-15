@@ -37,12 +37,9 @@ public sealed class CardService(ICardRepository cardRepository) : ICardService
     {
         var card = await _cardRepository.GetById(id);
 
-        if (card is null)
-        {
-            return null;
-        }
-
-        return _cardMapper.MapCardEntityToCard(card);
+        return card is null
+            ? null
+            : _cardMapper.MapCardEntityToCard(card);
     }
 
     public async Task<Card[]> FetchByCategory(int categoryId)

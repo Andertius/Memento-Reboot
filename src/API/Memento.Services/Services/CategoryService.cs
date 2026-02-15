@@ -39,12 +39,9 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     {
         var category = await _categoryRepository.GetById(id);
 
-        if (category is null)
-        {
-            return null;
-        }
-
-        return _categoryMapper.MapCategoryEntityToCategory(category);
+        return category is null
+            ? null
+            : _categoryMapper.MapCategoryEntityToCategory(category);
     }
 
     public Task RemoveCategory(int id)

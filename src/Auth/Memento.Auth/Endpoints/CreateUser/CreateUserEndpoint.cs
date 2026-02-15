@@ -25,7 +25,7 @@ public sealed class CreateUserEndpoint(
 
     public override async Task HandleAsync(CreateUserRequest request, CancellationToken token)
     {
-        using var transaction = await _context.Database.BeginTransactionAsync();
+        await using var transaction = await _context.Database.BeginTransactionAsync(token);
         var user = new IdentityUser { UserName = request.Username };
 
         var result = await _userManager.CreateAsync(user, request.Password);
