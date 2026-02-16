@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Memento.Infrastructure.Repositories;
 using Memento.Services.Mappers;
@@ -10,15 +11,15 @@ namespace Memento.Services.Services;
 
 public interface ITagService
 {
-    Task<Tag[]> GetAllTags();
-    Task<Tag?> GetTagById(int id);
-    Task<Tag?> GetTagByName(string name);
-    Task<int> AddTag(Tag tag);
-    Task RemoveTag(int id);
-    Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds);
-    Task RemoveTagFromCard(int tagId, int cardId);
-    Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds);
-    Task RemoveTagFromCategory(int tagId, int categoryId);
+    Task<Tag[]> GetAllTags(CancellationToken token = default);
+    Task<Tag?> GetTagById(int id, CancellationToken token = default);
+    Task<Tag?> GetTagByName(string name, CancellationToken token = default);
+    Task<int> AddTag(Tag tag, CancellationToken token = default);
+    Task RemoveTag(int id, CancellationToken token = default);
+    Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
+    Task RemoveTagFromCard(int tagId, int cardId, CancellationToken token = default);
+    Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
+    Task RemoveTagFromCategory(int tagId, int categoryId, CancellationToken token = default);
 }
 
 public sealed class TagService(ITagRepository tagRepository) : ITagService
@@ -26,33 +27,33 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
     private readonly ITagRepository _tagRepository = tagRepository ?? throw new ArgumentNullException(nameof(tagRepository), "Tag Repository must not be null");
     private readonly TagMapper _tagMapper = new();
 
-    public async Task<Tag[]> GetAllTags()
+    public async Task<Tag[]> GetAllTags(CancellationToken token = default)
     {
-        var cards = await _tagRepository.GetAllTags();
+        var cards = await _tagRepository.GetAllTags(token);
         return cards.Select(_tagMapper.MapTagEntityToTag).ToArray();
     }
 
-    public async Task<Tag?> GetTagById(int id)
+    public async Task<Tag?> GetTagById(int id, CancellationToken token = default)
     {
-        var entity = await _tagRepository.GetById(id);
+        var entity = await _tagRepository.GetById(id, token);
 
         return entity is null
             ? null
             : _tagMapper.MapTagEntityToTag(entity);
     }
 
-    public async Task<Tag?> GetTagByName(string name)
+    public async Task<Tag?> GetTagByName(string name, CancellationToken token = default)
     {
-        var entity = await _tagRepository.GetByName(name);
+        var entity = await _tagRepository.GetByName(name, token);
 
         return entity is null
             ? null
             : _tagMapper.MapTagEntityToTag(entity);
     }
 
-    public async Task<int> AddTag(Tag tag)
+    public async Task<int> AddTag(Tag tag, CancellationToken token = default)
     {
-        var existing = await _tagRepository.GetByName(tag.Name);
+        var existing = await _tagRepository.GetByName(tag.Name, token);
 
         if (existing is not null)
         {
@@ -60,21 +61,21 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
         }
 
         var tagEntity = _tagMapper.MapTagToTagEntity(tag);
-        return await _tagRepository.AddTag(tagEntity);
+        return await _tagRepository.AddTag(tagEntity, token);
     }
 
-    public Task RemoveTag(int id)
-        => _tagRepository.RemoveTag(id);
+    public Task RemoveTag(int id, CancellationToken token = default)
+        => _tagRepository.RemoveTag(id, token);
 
-    public Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds)
-        => _tagRepository.AddTagsToCard(cardId, tagIds);
+    public Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
+        => _tagRepository.AddTagsToCard(cardId, tagIds, token);
 
-    public Task RemoveTagFromCard(int tagId, int cardId)
-        => _tagRepository.RemoveTagFromCard(tagId, cardId);
+    public Task RemoveTagFromCard(int tagId, int cardId, CancellationToken token = default)
+        => _tagRepository.RemoveTagFromCard(tagId, cardId, token);
 
-    public Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds)
-        => _tagRepository.AddTagsToCategory(categoryId, tagIds);
+    public Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
+        => _tagRepository.AddTagsToCategory(categoryId, tagIds, token);
 
-    public Task RemoveTagFromCategory(int tagId, int categoryId)
-        => _tagRepository.RemoveTagFromCategory(tagId, categoryId);
+    public Task RemoveTagFromCategory(int tagId, int categoryId, CancellationToken token = default)
+        => _tagRepository.RemoveTagFromCategory(tagId, categoryId, token);
 }

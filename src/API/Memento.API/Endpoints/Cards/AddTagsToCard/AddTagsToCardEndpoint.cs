@@ -19,7 +19,7 @@ public sealed class AddTagsToCardEndpoint(ITagService tagService) : Endpoint<Add
 
     public override async Task HandleAsync(AddTagsToCardRequest request, CancellationToken token)
     {
-        await _tagService.AddTagsToCard(request.CardId, request.TagIds);
+        await _tagService.AddTagsToCard(request.CardId, request.TagIds, token);
         await Send.OkAsync(cancellation: token);
     }
 }

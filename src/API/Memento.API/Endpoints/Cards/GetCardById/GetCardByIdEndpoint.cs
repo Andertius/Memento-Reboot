@@ -19,7 +19,7 @@ public sealed class GetCardByIdEndpoint(ICardService cardService) : Endpoint<Get
 
     public override async Task HandleAsync(GetCardByIdRequest request, CancellationToken token)
     {
-        var card = await _cardService.GetById(request.Id);
+        var card = await _cardService.GetById(request.Id, token);
         await Send.OkAsync(card, cancellation: token);
     }
 }

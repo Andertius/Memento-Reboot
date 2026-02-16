@@ -19,7 +19,7 @@ public sealed class AddTagsToCategoryEndpoint(ITagService tagService) : Endpoint
 
     public override async Task HandleAsync(AddTagsToCategoryRequest request, CancellationToken token)
     {
-        await _tagService.AddTagsToCategory(request.CategoryId, request.TagIds);
+        await _tagService.AddTagsToCategory(request.CategoryId, request.TagIds, token);
         await Send.OkAsync(cancellation: token);
     }
 }

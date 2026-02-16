@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Memento.Infrastructure.Entities;
@@ -29,7 +30,7 @@ public sealed class CardServiceAddCardTests
         var service = new CardService(repository);
         
         // Act
-        await service.AddCard(card);
+        await service.AddCard(card, CancellationToken.None);
 
         // Assert
         var expression = GetPredicate(card);

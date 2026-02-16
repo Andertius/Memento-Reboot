@@ -19,7 +19,7 @@ public sealed class AddCardsToCategoryEndpoint(ICategoryService categoryService)
 
     public override async Task HandleAsync(AddCardsToCategoryRequest request, CancellationToken token)
     {
-        await _categoryService.AddCardsToCategory(request.CategoryId, request.CardIds);
+        await _categoryService.AddCardsToCategory(request.CategoryId, request.CardIds, token);
         await Send.OkAsync(cancellation: token);
     }
 }

@@ -19,7 +19,7 @@ public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagEnti
 
     public override async Task HandleAsync(AddTagEntityRequest entityRequest, CancellationToken token)
     {
-        int id = await _tagService.AddTag(entityRequest.ToModel());
+        int id = await _tagService.AddTag(entityRequest.ToModel(), token);
 
         if (id == 0)
         {

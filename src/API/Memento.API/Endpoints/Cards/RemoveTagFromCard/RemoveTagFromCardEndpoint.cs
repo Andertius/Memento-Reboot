@@ -19,7 +19,7 @@ public sealed class RemoveTagFromCardEndpoint(ITagService tagService) : Endpoint
 
     public override async Task HandleAsync(RemoveTagFromCardRequest request, CancellationToken token)
     {
-        await _tagService.RemoveTagFromCard(request.TagId, request.CardId);
+        await _tagService.RemoveTagFromCard(request.TagId, request.CardId, token);
         await Send.OkAsync(cancellation: token);
     }
 }

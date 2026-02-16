@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Memento.Infrastructure.Entities;
@@ -27,7 +28,7 @@ public sealed class CategoryServiceGetAllCategoriesTests
         var sevice = new CategoryService(repository);
 
         // Act
-        var categories = await sevice.GetAllCategories();
+        var categories = await sevice.GetAllCategories(CancellationToken.None);
 
         // Assert
         var category = Assert.Single(categories);
@@ -47,7 +48,7 @@ public sealed class CategoryServiceGetAllCategoriesTests
         var sevice = new CategoryService(repository);
 
         // Act
-        var cartegories = await sevice.GetAllCategories();
+        var cartegories = await sevice.GetAllCategories(CancellationToken.None);
 
         // Assert
         Assert.Empty(cartegories);

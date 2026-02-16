@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Memento.Infrastructure.Entities;
@@ -27,7 +28,7 @@ public sealed class CategoryServiceGetByNameTests
         var sevice = new CategoryService(repository);
 
         // Act
-        var category = await sevice.GetByName("Name");
+        var category = await sevice.GetByName("Name", CancellationToken.None);
 
         // Assert
         Assert.NotNull(category);
@@ -47,7 +48,7 @@ public sealed class CategoryServiceGetByNameTests
         var sevice = new CategoryService(repository);
 
         // Act
-        var category = await sevice.GetByName("Name");
+        var category = await sevice.GetByName("Name", CancellationToken.None);
 
         // Assert
         Assert.Null(category);

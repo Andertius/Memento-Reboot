@@ -19,7 +19,7 @@ public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endp
 
     public override async Task HandleAsync(AddCategoryEntityRequest entityRequest, CancellationToken token)
     {
-        int id = await _categoryService.AddCategory(entityRequest.ToModel());
+        int id = await _categoryService.AddCategory(entityRequest.ToModel(), token);
 
         if (id == 0)
         {

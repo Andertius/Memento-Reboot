@@ -1,5 +1,6 @@
 using System;
 using System.Linq.Expressions;
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Memento.Infrastructure.Entities;
@@ -28,7 +29,7 @@ public sealed class CategoryServiceAddCategoryTests
         var service = new CategoryService(repository);
     
         // Act
-        await service.AddCategory(category);
+        await service.AddCategory(category, CancellationToken.None);
 
         // Assert
         var expression = GetPredicate(category);
@@ -58,7 +59,7 @@ public sealed class CategoryServiceAddCategoryTests
         var service = new CategoryService(repository);
     
         // Act
-        await service.AddCategory(category);
+        await service.AddCategory(category, CancellationToken.None);
 
         // Assert
         var expression = GetPredicate(category);

@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Memento.Infrastructure.Repositories;
 using Memento.Services.Mappers;
@@ -10,13 +11,13 @@ namespace Memento.Services.Services;
 
 public interface ICategoryService
 {
-    Task<Category[]> GetAllCategories();
-    Task<int> AddCategory(Category category);
-    Task<Category?> GetById(int id);
-    Task<Category?> GetByName(string name);
-    Task RemoveCategory(int id);
-    Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds);
-    Task RemoveCardFromCategory(int categoryId, int cardId);
+    Task<Category[]> GetAllCategories(CancellationToken token = default);
+    Task<int> AddCategory(Category category, CancellationToken token = default);
+    Task<Category?> GetById(int id, CancellationToken token = default);
+    Task<Category?> GetByName(string name, CancellationToken token = default);
+    Task RemoveCategory(int id, CancellationToken token = default);
+    Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
+    Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default);
 }
 
 public sealed class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
@@ -24,15 +25,15 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository), "Category Repository must not be null");
     private readonly CategoryMapper _categoryMapper = new();
 
-    public async Task<Category[]> GetAllCategories()
+    public async Task<Category[]> GetAllCategories(CancellationToken token = default)
     {
-        var cards = await _categoryRepository.GetAllCategories();
+        var cards = await _categoryRepository.GetAllCategories(token);
         return cards.Select(_categoryMapper.MapCategoryEntityToCategory).ToArray();
     }
 
-    public async Task<int> AddCategory(Category category)
+    public async Task<int> AddCategory(Category category, CancellationToken token = default)
     {
-        var existing = await _categoryRepository.GetByName(category.Name);
+        var existing = await _categoryRepository.GetByName(category.Name, token);
 
         if (existing is not null)
         {
@@ -40,33 +41,33 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
         }
 
         var categoryEntity = _categoryMapper.MapCategoryToCategoryEntity(category);
-        return await _categoryRepository.AddCategory(categoryEntity);
+        return await _categoryRepository.AddCategory(categoryEntity, token);
     }
 
-    public async Task<Category?> GetById(int id)
+    public async Task<Category?> GetById(int id, CancellationToken token = default)
     {
-        var category = await _categoryRepository.GetById(id);
+        var category = await _categoryRepository.GetById(id, token);
 
         return category is null
             ? null
             : _categoryMapper.MapCategoryEntityToCategory(category);
     }
 
-    public async Task<Category?> GetByName(string name)
+    public async Task<Category?> GetByName(string name, CancellationToken token = default)
     {
-        var category = await _categoryRepository.GetByName(name);
+        var category = await _categoryRepository.GetByName(name, token);
 
         return category is null
             ? null
             : _categoryMapper.MapCategoryEntityToCategory(category);
     }
 
-    public Task RemoveCategory(int id)
-        => _categoryRepository.RemoveCategory(id);
+    public Task RemoveCategory(int id, CancellationToken token = default)
+        => _categoryRepository.RemoveCategory(id, token);
 
-    public Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds)
-        => _categoryRepository.AddCardsToCategory(categoryId, cardIds);
+    public Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default)
+        => _categoryRepository.AddCardsToCategory(categoryId, cardIds, token);
 
-    public Task RemoveCardFromCategory(int categoryId, int cardId)
-        => _categoryRepository.RemoveCardFromCategory(categoryId, cardId);
+    public Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default)
+        => _categoryRepository.RemoveCardFromCategory(categoryId, cardId, token);
 }

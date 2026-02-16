@@ -19,7 +19,7 @@ public sealed class RemoveTagFromCategoryEndpoint(ITagService tagService) : Endp
 
     public override async Task HandleAsync(RemoveTagFromCategoryRequest request, CancellationToken token)
     {
-        await _tagService.RemoveTagFromCategory(request.TagId, request.CategoryId);
+        await _tagService.RemoveTagFromCategory(request.TagId, request.CategoryId, token);
         await Send.OkAsync(cancellation: token);
     }
 }

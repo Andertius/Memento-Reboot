@@ -19,7 +19,7 @@ public sealed class RemoveCardFromCategoryEndpoint(ICategoryService categoryServ
 
     public override async Task HandleAsync(RemoveCardFromCategoryRequest request, CancellationToken token)
     {
-        await _categoryService.RemoveCardFromCategory(request.CategoryId, request.CardId);
+        await _categoryService.RemoveCardFromCategory(request.CategoryId, request.CardId, token);
         await Send.OkAsync(cancellation: token);
     }
 }

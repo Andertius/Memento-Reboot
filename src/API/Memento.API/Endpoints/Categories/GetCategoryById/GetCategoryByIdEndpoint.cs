@@ -19,7 +19,7 @@ public sealed class GetCategoryByIdEndpoint(ICategoryService categoryService) : 
 
     public override async Task HandleAsync(GetCategoryByIdRequest request, CancellationToken token)
     {
-        var card = await _categoryService.GetById(request.Id);
+        var card = await _categoryService.GetById(request.Id, token);
         await Send.OkAsync(card, cancellation: token);
     }
 }

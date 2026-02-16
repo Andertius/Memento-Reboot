@@ -19,7 +19,7 @@ public sealed class GetTagByIdEndpoint(ITagService tagService) : Endpoint<GetTag
 
     public override async Task HandleAsync(GetTagByIdRequest request, CancellationToken token)
     {
-        var tags = await _tagService.GetTagById(request.Id);
+        var tags = await _tagService.GetTagById(request.Id, token);
         await Send.OkAsync(tags, cancellation: token);
     }
 }

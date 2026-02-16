@@ -1,3 +1,4 @@
+using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
 using Memento.Infrastructure.Entities;
@@ -29,7 +30,7 @@ public sealed class CardServiceGetAllCardsTests
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards();
+        var cards = await sevice.GetAllCards(CancellationToken.None);
 
         // Assert
         var card = Assert.Single(cards);
@@ -51,7 +52,7 @@ public sealed class CardServiceGetAllCardsTests
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards();
+        var cards = await sevice.GetAllCards(CancellationToken.None);
 
         // Assert
         Assert.Empty(cards);

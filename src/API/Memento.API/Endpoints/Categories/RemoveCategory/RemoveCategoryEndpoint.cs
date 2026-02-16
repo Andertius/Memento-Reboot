@@ -20,7 +20,7 @@ public sealed class RemoveCategoryEndpoint(ICategoryService categoryService) : E
     // TODO remove hanging cards
     public override async Task HandleAsync(RemoveCategoryRequest request, CancellationToken token)
     {
-        await _categoryService.RemoveCategory(request.Id);
+        await _categoryService.RemoveCategory(request.Id, token);
         await Send.OkAsync(cancellation: token);
     }
 }

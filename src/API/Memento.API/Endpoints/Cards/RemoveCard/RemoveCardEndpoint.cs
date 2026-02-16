@@ -19,7 +19,7 @@ public sealed class RemoveCardEndpoint(ICardService cardService) : Endpoint<Remo
 
     public override async Task HandleAsync(RemoveCardRequest request, CancellationToken token)
     {
-        await _cardService.RemoveCard(request.Id);
+        await _cardService.RemoveCard(request.Id, token);
         await Send.OkAsync(cancellation: token);
     }
 }

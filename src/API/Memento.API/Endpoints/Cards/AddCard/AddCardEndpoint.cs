@@ -19,7 +19,7 @@ public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCard
 
     public override async Task HandleAsync(AddCardEntityRequest entityRequest, CancellationToken token)
     {
-        int id = await _cardService.AddCard(entityRequest.ToModel());
+        int id = await _cardService.AddCard(entityRequest.ToModel(), token);
         await Send.CreatedAtAsync($"{ApiPrefixes.CardsPrefix}/{id}", cancellation: token);
     }
 }
