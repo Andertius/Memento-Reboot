@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.GetCardsByCategoryId;
@@ -12,7 +13,7 @@ public sealed class GetCardsByCategoryIdEndpoint(ICardService cardService) : End
 
     public override void Configure()
     {
-        Get("/api/categories/{CategoryId}/cards");
+        Get(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards");
         Roles("Learner");
     }
 

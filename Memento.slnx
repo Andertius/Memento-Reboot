@@ -17,12 +17,14 @@
 
   <Folder Name="/src/" />
   <Folder Name="/src/api/">
-      <Project Path="./src/API/Memento.API/Memento.API.csproj" />
-      <Project Path="./src/API/Memento.Infrastructure/Memento.Infrastructure.csproj" />
-      <Project Path="./src/API/Memento.Services/Memento.Services.csproj" />
+    <File Path="src\API\Dockerfile" />
+    <Project Path="./src/API/Memento.API/Memento.API.csproj" />
+    <Project Path="./src/API/Memento.Infrastructure/Memento.Infrastructure.csproj" />
+    <Project Path="./src/API/Memento.Services/Memento.Services.csproj" />
   </Folder>
 
   <Folder Name="/src/auth/">
+    <File Path="src\Auth\Dockerfile" />
     <Project Path="./src/Auth/Memento.Auth/Memento.Auth.csproj" />
   </Folder>
   <Folder Name="/tests/" />

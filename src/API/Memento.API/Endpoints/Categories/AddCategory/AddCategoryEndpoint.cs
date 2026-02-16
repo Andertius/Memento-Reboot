@@ -2,23 +2,24 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.AddCategory;
 
-public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endpoint<AddCategoryRequest>
+public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endpoint<AddCategoryEntityRequest>
 {
     private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService), "Category Service must not be null");
 
     public override void Configure()
     {
-        Post("/api/categories");
+        Post(ApiPrefixes.CategoriesPrefix);
         Roles("Learner");
     }
 
-    public override async Task HandleAsync(AddCategoryRequest request, CancellationToken token)
+    public override async Task HandleAsync(AddCategoryEntityRequest entityRequest, CancellationToken token)
     {
-        int id = await _categoryService.AddCategory(request.ToModel());
+        int id = await _categoryService.AddCategory(entityRequest.ToModel());
 
         if (id == 0)
         {
@@ -28,6 +29,6 @@ public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endp
             return;
         }
 
-        await Send.CreatedAtAsync($"/api/categories/{id}", cancellation: token);
+        await Send.CreatedAtAsync($"{ApiPrefixes.CategoriesPrefix}/{id}", cancellation: token);
     }
 }

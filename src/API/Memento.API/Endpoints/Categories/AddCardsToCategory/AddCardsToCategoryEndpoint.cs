@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.AddCardsToCategory;
@@ -12,7 +13,7 @@ public sealed class AddCardsToCategoryEndpoint(ICategoryService categoryService)
 
     public override void Configure()
     {
-        Post("/api/categories/{CategoryId}/cards");
+        Post(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards");
         Roles("Learner");
     }
 

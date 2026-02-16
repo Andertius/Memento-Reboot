@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Tags.GetTagByName;
@@ -12,7 +13,7 @@ public sealed class GetTagByNameEndpoint(ITagService tagService) : Endpoint<GetT
 
     public override void Configure()
     {
-        Get("/api/tags/name/{Name}");
+        Get(ApiPrefixes.TagsPrefix + "/name/{Name}");
         Roles("Learner");
     }
 

@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.GetCategoryByName;
@@ -12,7 +13,7 @@ public sealed class GetCategoryByNameEndpoint(ICategoryService categoryService) 
 
     public override void Configure()
     {
-        Get("/api/categories/name/{Name}");
+        Get(ApiPrefixes.CategoriesPrefix + "/name/{Name}");
         Roles("Learner");
     }
 

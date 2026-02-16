@@ -5,16 +5,16 @@ using Memento.Services.Models;
 
 namespace Memento.API.Endpoints.Categories.AddCategory;
 
-public sealed class AddCategoryRequest : IRequest<Category>
+public sealed class AddCategoryEntityRequest : IEntityRequest<Category>
 {
-    public string? Name { get; set; }
-    public string? Description { get; set; }
+    public string Name { get; init; } = "";
+    public string Description { get; init; } = "";
     public IReadOnlyCollection<int> TagIds { get; set; } = [];
 
     public Category ToModel() => new()
     {
         Name = Name,
         Description = Description,
-        Tags = TagIds.Select(id => new Tag() { Id = id }).ToArray(),
+        Tags = TagIds.Select(id => new Tag { Id = id }).ToArray(),
     };
 }

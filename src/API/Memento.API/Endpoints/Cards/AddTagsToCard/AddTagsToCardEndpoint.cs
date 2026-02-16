@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.AddTagsToCard;
@@ -12,7 +13,7 @@ public sealed class AddTagsToCardEndpoint(ITagService tagService) : Endpoint<Add
 
     public override void Configure()
     {
-        Post("/api/cards/{CardId}/tags");
+        Post(ApiPrefixes.CardsPrefix + "/{CardId}/tags");
         Roles("Learner");
     }
 

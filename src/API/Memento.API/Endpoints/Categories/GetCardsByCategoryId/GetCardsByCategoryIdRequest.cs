@@ -2,5 +2,5 @@ namespace Memento.API.Endpoints.Categories.GetCardsByCategoryId;
 
 public sealed class GetCardsByCategoryIdRequest
 {
-    public int CategoryId { get; set; }
+    public int CategoryId { get; init; }
 }

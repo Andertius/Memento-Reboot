@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.RemoveCard;
@@ -12,7 +13,7 @@ public sealed class RemoveCardEndpoint(ICardService cardService) : Endpoint<Remo
 
     public override void Configure()
     {
-        Delete("/api/cards/{Id}");
+        Delete(ApiPrefixes.CardsPrefix + "/{Id}");
         Roles("Learner");
     }
 

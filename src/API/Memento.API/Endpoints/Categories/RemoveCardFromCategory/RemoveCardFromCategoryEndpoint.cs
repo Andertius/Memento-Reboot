@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.RemoveCardFromCategory;
@@ -12,7 +13,7 @@ public sealed class RemoveCardFromCategoryEndpoint(ICategoryService categoryServ
 
     public override void Configure()
     {
-        Delete("/api/categories/{CategoryId}/cards/{CardId}");
+        Delete(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards/{CardId}");
         Roles("Learner");
     }
 

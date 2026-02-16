@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.RemoveTagFromCategory;
@@ -12,7 +13,7 @@ public sealed class RemoveTagFromCategoryEndpoint(ITagService tagService) : Endp
 
     public override void Configure()
     {
-        Delete("/api/categories/{CategoryId}/tags/{TagId}");
+        Delete(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/tags/{TagId}");
         Roles("Learner");
     }
 

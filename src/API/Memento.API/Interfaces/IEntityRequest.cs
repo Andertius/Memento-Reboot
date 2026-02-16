@@ -1,6 +1,6 @@
 namespace Memento.API.Interfaces;
 
-public interface IRequest<out T>
+public interface IEntityRequest<out T>
 {
     T ToModel();
 }

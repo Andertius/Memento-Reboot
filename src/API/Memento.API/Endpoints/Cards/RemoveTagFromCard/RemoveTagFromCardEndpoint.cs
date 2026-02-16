@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.RemoveTagFromCard;
@@ -12,7 +13,7 @@ public sealed class RemoveTagFromCardEndpoint(ITagService tagService) : Endpoint
 
     public override void Configure()
     {
-        Delete("/api/cards/{CardId}/tags/{TagId}");
+        Delete(ApiPrefixes.CardsPrefix + "/{CardId}/tags/{TagId}");
         Roles("Learner");
     }
 

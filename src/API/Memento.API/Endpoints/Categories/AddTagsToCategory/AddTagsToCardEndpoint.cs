@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.AddTagsToCategory;
@@ -12,7 +13,7 @@ public sealed class AddTagsToCategoryEndpoint(ITagService tagService) : Endpoint
 
     public override void Configure()
     {
-        Post("/api/categories/{CategoryId}/tags");
+        Post(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/tags");
         Roles("Learner");
     }
 

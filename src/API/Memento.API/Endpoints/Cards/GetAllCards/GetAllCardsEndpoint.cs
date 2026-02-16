@@ -2,6 +2,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
+using Memento.API.Constants;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.GetAllCards;
@@ -12,7 +13,7 @@ public sealed class GetAllCardsEndpoint(ICardService cardService) : EndpointWith
 
     public override void Configure()
     {
-        Get("/api/cards");
+        Get(ApiPrefixes.CardsPrefix);
         Roles("Learner");
     }
 
