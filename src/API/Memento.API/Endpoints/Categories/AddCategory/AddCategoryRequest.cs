@@ -5,7 +5,7 @@ using Memento.Services.Models;
 
 namespace Memento.API.Endpoints.Categories.AddCategory;
 
-public sealed class AddCategoryEntityRequest : IEntityRequest<Category>
+public sealed class AddCategoryRequest : IEntityRequest<Category>
 {
     public string Name { get; init; } = "";
     public string Description { get; init; } = "";

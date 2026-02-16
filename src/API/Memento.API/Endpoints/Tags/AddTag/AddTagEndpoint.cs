@@ -7,7 +7,7 @@ using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Tags.AddTag;
 
-public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagEntityRequest>
+public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagRequest>
 {
     private readonly ITagService _tagService = tagService ?? throw new ArgumentNullException(nameof(tagService), "Tag Service must not be null");
 
@@ -17,9 +17,9 @@ public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagEnti
         Roles("Learner");
     }
 
-    public override async Task HandleAsync(AddTagEntityRequest entityRequest, CancellationToken token)
+    public override async Task HandleAsync(AddTagRequest request, CancellationToken token)
     {
-        int id = await _tagService.AddTag(entityRequest.ToModel(), token);
+        int id = await _tagService.AddTag(request.ToModel(), token);
 
         if (id == 0)
         {

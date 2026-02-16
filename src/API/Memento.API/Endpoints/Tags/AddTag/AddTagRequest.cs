@@ -3,7 +3,7 @@ using Memento.Services.Models;
 
 namespace Memento.API.Endpoints.Tags.AddTag;
 
-public sealed class AddTagEntityRequest : IEntityRequest<Tag>
+public sealed class AddTagRequest : IEntityRequest<Tag>
 {
     public string Name { get; init; } = "";
 

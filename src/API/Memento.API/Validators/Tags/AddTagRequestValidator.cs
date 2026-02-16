@@ -4,7 +4,7 @@ using Memento.API.Endpoints.Tags.AddTag;
 
 namespace Memento.API.Validators.Tags;
 
-public sealed class AddTagRequestValidator : Validator<AddTagEntityRequest>
+public sealed class AddTagRequestValidator : Validator<AddTagRequest>
 {
     public AddTagRequestValidator()
     {

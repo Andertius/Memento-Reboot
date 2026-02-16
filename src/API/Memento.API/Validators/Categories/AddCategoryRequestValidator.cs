@@ -4,7 +4,7 @@ using Memento.API.Endpoints.Categories.AddCategory;
 
 namespace Memento.API.Validators.Categories;
 
-public sealed class AddCategoryRequestValidator : Validator<AddCategoryEntityRequest>
+public sealed class AddCategoryRequestValidator : Validator<AddCategoryRequest>
 {
     public AddCategoryRequestValidator()
     {

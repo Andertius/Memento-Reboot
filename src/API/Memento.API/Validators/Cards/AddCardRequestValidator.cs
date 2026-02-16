@@ -4,7 +4,7 @@ using Memento.API.Endpoints.Cards.AddCard;
 
 namespace Memento.API.Validators.Cards;
 
-public sealed class AddCardRequestValidator : Validator<AddCardEntityRequest>
+public sealed class AddCardRequestValidator : Validator<AddCardRequest>
 {
     public AddCardRequestValidator()
     {

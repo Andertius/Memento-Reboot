@@ -5,7 +5,7 @@ using Memento.Services.Models;
 
 namespace Memento.API.Endpoints.Cards.AddCard;
 
-public sealed class AddCardEntityRequest : IEntityRequest<Card>
+public sealed class AddCardRequest : IEntityRequest<Card>
 {
     public string Word { get; init; } = "";
     public string Translation { get; init; } = "";
