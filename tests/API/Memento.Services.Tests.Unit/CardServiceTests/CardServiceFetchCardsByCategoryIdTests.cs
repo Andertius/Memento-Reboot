@@ -7,7 +7,7 @@ using Xunit;
 
 namespace Memento.Services.Tests.Unit.CardServiceTests;
 
-public sealed class CardServiceGetAllCardsTests
+public sealed class CardServiceFetchByCategoryTests
 {
     [Fact]
     public async Task Should_map_and_return_cards_when_found()
@@ -24,12 +24,12 @@ public sealed class CardServiceGetAllCardsTests
         };
 
         var repository = A.Fake<ICardRepository>();
-        A.CallTo(() => repository.GetAllCards()).Returns([cardEntity]);
+        A.CallTo(() => repository.FetchByCategoryId(1)).Returns([cardEntity]);
 
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards();
+        var cards = await sevice.FetchByCategory(1);
 
         // Assert
         var card = Assert.Single(cards);
@@ -46,12 +46,12 @@ public sealed class CardServiceGetAllCardsTests
     {
         // Arrange
         var repository = A.Fake<ICardRepository>();
-        A.CallTo(() => repository.GetAllCards()).Returns([]);
+        A.CallTo(() => repository.FetchByCategoryId(1)).Returns([]);
 
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards();
+        var cards = await sevice.FetchByCategory(1);
 
         // Assert
         Assert.Empty(cards);

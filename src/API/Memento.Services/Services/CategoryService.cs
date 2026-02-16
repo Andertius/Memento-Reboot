@@ -40,7 +40,7 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
         }
 
         var categoryEntity = _categoryMapper.MapCategoryToCategoryEntity(category);
-        return await _categoryRepository.AddCard(categoryEntity);
+        return await _categoryRepository.AddCategory(categoryEntity);
     }
 
     public async Task<Category?> GetById(int id)

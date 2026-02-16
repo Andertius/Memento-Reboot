@@ -11,7 +11,7 @@ namespace Memento.Infrastructure.Repositories;
 public interface ICategoryRepository
 {
     Task<CategoryEntity[]> GetAllCategories();
-    Task<int> AddCard(CategoryEntity entity);
+    Task<int> AddCategory(CategoryEntity entity);
     Task<CategoryEntity?> GetById(int id);
     Task<CategoryEntity?> GetByName(string? name);
     Task RemoveCategory(int id);
@@ -30,7 +30,7 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
             .Include(x => x.Tags)
             .ToArrayAsync();
 
-    public async Task<int> AddCard(CategoryEntity entity)
+    public async Task<int> AddCategory(CategoryEntity entity)
     {
         entity.Tags = await _context
             .Tags
