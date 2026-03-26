@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.API.Constants;
+using Memento.API.Endpoints.Cards.GetCardById;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.AddCard;
@@ -20,6 +21,6 @@ public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCard
     public override async Task HandleAsync(AddCardRequest request, CancellationToken token)
     {
         int id = await _cardService.AddCard(request.ToModel(), token);
-        await Send.CreatedAtAsync($"{ApiPrefixes.CardsPrefix}/{id}", cancellation: token);
+        await Send.CreatedAtAsync<GetCardByIdEndpoint>(new { id }, cancellation: token);
     }
 }

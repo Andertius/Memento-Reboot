@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.API.Constants;
+using Memento.API.Endpoints.Categories.GetCategoryById;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.AddCategory;
@@ -29,6 +30,6 @@ public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endp
             return;
         }
 
-        await Send.CreatedAtAsync($"{ApiPrefixes.CategoriesPrefix}/{id}", cancellation: token);
+        await Send.CreatedAtAsync<GetCategoryByIdEndpoint>(new { id }, cancellation: token);
     }
 }

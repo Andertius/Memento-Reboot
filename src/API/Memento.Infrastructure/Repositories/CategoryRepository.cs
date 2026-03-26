@@ -13,6 +13,7 @@ public interface ICategoryRepository
 {
     Task<CategoryEntity[]> GetAllCategories(CancellationToken token = default);
     Task<int> AddCategory(CategoryEntity entity, CancellationToken token = default);
+    Task UpdateCategory(CategoryEntity entity, CancellationToken token = default);
     Task<CategoryEntity?> GetById(int id, CancellationToken token = default);
     Task<CategoryEntity?> GetByName(string? name, CancellationToken token = default);
     Task RemoveCategory(int id, CancellationToken token = default);
@@ -41,6 +42,12 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
         _context.Categories.Add(entity);
         await _context.SaveChangesAsync(token);
         return entity.Id;
+    }
+
+    public async Task UpdateCategory(CategoryEntity entity, CancellationToken token = default)
+    {
+        _context.Categories.Update(entity);
+        await _context.SaveChangesAsync(token);
     }
 
     public Task<CategoryEntity?> GetById(int id, CancellationToken token = default)

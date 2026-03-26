@@ -15,6 +15,7 @@ public interface ITagService
     Task<Tag?> GetTagById(int id, CancellationToken token = default);
     Task<Tag?> GetTagByName(string name, CancellationToken token = default);
     Task<int> AddTag(Tag tag, CancellationToken token = default);
+    Task<bool> UpdateTag(Tag tag, CancellationToken token = default);
     Task RemoveTag(int id, CancellationToken token = default);
     Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
     Task RemoveTagFromCard(int tagId, int cardId, CancellationToken token = default);
@@ -62,6 +63,21 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
 
         var tagEntity = _tagMapper.MapTagToTagEntity(tag);
         return await _tagRepository.AddTag(tagEntity, token);
+    }
+
+    public async Task<bool> UpdateTag(Tag tag, CancellationToken token = default)
+    {
+        var existing = await _tagRepository.GetByName(tag.Name, token);
+
+        if (existing is not null && existing.Id != tag.Id)
+        {
+            return false;
+        }
+
+        var tagEntity = _tagMapper.MapTagToTagEntity(tag);
+        await _tagRepository.UpdateTag(tagEntity, token);
+
+        return true;
     }
 
     public Task RemoveTag(int id, CancellationToken token = default)

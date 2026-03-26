@@ -12,6 +12,7 @@ public interface ICardRepository
 {
     Task<CardEntity[]> GetAllCards(CancellationToken token = default);
     Task<int> AddCard(CardEntity entity, CancellationToken token = default);
+    Task UpdateCard(CardEntity entity, CancellationToken token = default);
     Task<CardEntity?> GetById(int id, CancellationToken token = default);
     Task RemoveCard(int id, CancellationToken token = default);
     Task<CardEntity[]> FetchByCategoryId(int categoryId, CancellationToken token = default);
@@ -44,6 +45,12 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
         _context.Cards.Add(entity);
         await _context.SaveChangesAsync(token);
         return entity.Id;
+    }
+
+    public async Task UpdateCard(CardEntity entity, CancellationToken token = default)
+    {
+        _context.Cards.Update(entity);
+        await _context.SaveChangesAsync(token);
     }
 
     public Task<CardEntity?> GetById(int id, CancellationToken token = default)

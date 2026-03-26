@@ -13,6 +13,7 @@ public interface ITagRepository
 {
     Task<TagEntity[]> GetAllTags(CancellationToken token = default);
     Task<int> AddTag(TagEntity entity, CancellationToken token = default);
+    Task UpdateTag(TagEntity entity, CancellationToken token = default);
     Task<TagEntity?> GetById(int id, CancellationToken token = default);
     Task<TagEntity?> GetByName(string? name, CancellationToken token = default);
     Task RemoveTag(int id, CancellationToken token = default);
@@ -37,6 +38,12 @@ public sealed class TagRepository(CardDbContext context) : ITagRepository
         _context.Tags.Add(entity);
         await _context.SaveChangesAsync(token);
         return entity.Id;
+    }
+
+    public async Task UpdateTag(TagEntity entity, CancellationToken token = default)
+    {
+        _context.Tags.Update(entity);
+        await _context.SaveChangesAsync(token);
     }
 
     public Task<TagEntity?> GetById(int id, CancellationToken token = default)

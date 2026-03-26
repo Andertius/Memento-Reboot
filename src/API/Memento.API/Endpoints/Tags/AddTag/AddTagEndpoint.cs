@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.API.Constants;
+using Memento.API.Endpoints.Tags.GetTagById;
 using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Tags.AddTag;
@@ -29,6 +30,6 @@ public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagRequ
             return;
         }
 
-        await Send.CreatedAtAsync($"{ApiPrefixes.TagsPrefix}/{id}", cancellation: token);
+        await Send.CreatedAtAsync<GetTagByIdEndpoint>(new { id }, cancellation: token);
     }
 }

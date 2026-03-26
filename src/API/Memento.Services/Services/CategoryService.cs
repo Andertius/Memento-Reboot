@@ -12,11 +12,19 @@ namespace Memento.Services.Services;
 public interface ICategoryService
 {
     Task<Category[]> GetAllCategories(CancellationToken token = default);
+
     Task<int> AddCategory(Category category, CancellationToken token = default);
+
+    Task<bool> UpdateCategory(Category category, CancellationToken token = default);
+
     Task<Category?> GetById(int id, CancellationToken token = default);
+
     Task<Category?> GetByName(string name, CancellationToken token = default);
+
     Task RemoveCategory(int id, CancellationToken token = default);
+
     Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
+
     Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default);
 }
 
@@ -28,6 +36,7 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     public async Task<Category[]> GetAllCategories(CancellationToken token = default)
     {
         var cards = await _categoryRepository.GetAllCategories(token);
+
         return cards.Select(_categoryMapper.MapCategoryEntityToCategory).ToArray();
     }
 
@@ -41,7 +50,23 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
         }
 
         var categoryEntity = _categoryMapper.MapCategoryToCategoryEntity(category);
+
         return await _categoryRepository.AddCategory(categoryEntity, token);
+    }
+
+    public async Task<bool> UpdateCategory(Category category, CancellationToken token = default)
+    {
+        var existing = await _categoryRepository.GetByName(category.Name, token);
+
+        if (existing is not null && existing.Id != category.Id)
+        {
+            return false;
+        }
+
+        var categoryEntity = _categoryMapper.MapCategoryToCategoryEntity(category);
+        await _categoryRepository.UpdateCategory(categoryEntity, token);
+
+        return true;
     }
 
     public async Task<Category?> GetById(int id, CancellationToken token = default)
