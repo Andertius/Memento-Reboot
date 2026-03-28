@@ -3,13 +3,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.API.Constants;
-using Memento.API.Handlers;
+using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.DeleteCardImage;
 
-public sealed class DeleteCardImageEndpoint(IImageHandler imageHandler) : Endpoint<DeleteCardImageRequest>
+public sealed class DeleteCardImageEndpoint(IImageService imageService) : Endpoint<DeleteCardImageRequest>
 {
-    private readonly IImageHandler _imageHandler = imageHandler ?? throw new ArgumentNullException(nameof(imageHandler), "Image handler must not be null");
+    private readonly IImageService _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService), "Image handler must not be null");
 
     public override void Configure()
     {
@@ -19,7 +19,7 @@ public sealed class DeleteCardImageEndpoint(IImageHandler imageHandler) : Endpoi
 
     public override async Task HandleAsync(DeleteCardImageRequest request, CancellationToken token)
     {
-        await _imageHandler.DeleteCardImageAsync(request.CardId, token);
+        await _imageService.DeleteCardImageAsync(request.CardId, token);
         await Send.OkAsync(cancellation: token);
     }
 }

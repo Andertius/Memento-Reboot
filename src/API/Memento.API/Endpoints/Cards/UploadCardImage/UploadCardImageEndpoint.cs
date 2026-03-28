@@ -1,16 +1,15 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
 using Memento.API.Constants;
-using Memento.API.Handlers;
+using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.UploadCardImage;
 
-public sealed class UploadCardImageEndpoint(IImageHandler imageHandler) : Endpoint<UploadCardImageRequest>
+public sealed class UploadCardImageEndpoint(IImageService imageService) : Endpoint<UploadCardImageRequest>
 {
-    private readonly IImageHandler _imageHandler = imageHandler ?? throw new ArgumentNullException(nameof(imageHandler), "Image handler must not be null");
+    private readonly IImageService _imageService = imageService ?? throw new ArgumentNullException(nameof(imageService), "Image service must not be null");
 
     public override void Configure()
     {
@@ -39,7 +38,7 @@ public sealed class UploadCardImageEndpoint(IImageHandler imageHandler) : Endpoi
             return;
         }
 
-        string? fileName = await _imageHandler.UploadCardImageAsync(file, request.CardId, token);
+        string? fileName = await _imageService.UploadCardImageAsync(file.OpenReadStream(), file.FileName, request.CardId, token);
         await Send.OkAsync(new { fileName }, cancellation: token);
     }
 }
