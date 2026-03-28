@@ -6,7 +6,7 @@ namespace Memento.API.Endpoints.Tags.UpdateTag;
 public sealed class UpdateTagRequest : IEntityRequest<Tag>
 {
     public int Id { get; set; }
-    public string Name { get; init; } = "";
+    public required string Name { get; init; }
 
     public Tag ToModel() => new()
     {

@@ -12,12 +12,25 @@ namespace Memento.Infrastructure.Repositories;
 public interface ICategoryRepository
 {
     Task<CategoryEntity[]> GetAllCategories(CancellationToken token = default);
+
     Task<int> AddCategory(CategoryEntity entity, CancellationToken token = default);
+
     Task UpdateCategory(CategoryEntity entity, CancellationToken token = default);
+
+    Task<(bool Exists, string? ImageName)> GetImageName(int categoryId, CancellationToken token = default);
+
+    Task UpsertImage(int categoryId, string imageName, CancellationToken token = default);
+
+    Task RemoveImage(int categoryId, CancellationToken token = default);
+
     Task<CategoryEntity?> GetById(int id, CancellationToken token = default);
+
     Task<CategoryEntity?> GetByName(string? name, CancellationToken token = default);
+
     Task RemoveCategory(int id, CancellationToken token = default);
+
     Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
+
     Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default);
 }
 
@@ -41,12 +54,14 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
 
         _context.Categories.Add(entity);
         await _context.SaveChangesAsync(token);
+
         return entity.Id;
     }
 
     public async Task UpdateCategory(CategoryEntity entity, CancellationToken token = default)
     {
         _context.Categories.Update(entity);
+        _context.Entry(entity).Property(x => x.Image).IsModified = false;
         await _context.SaveChangesAsync(token);
     }
 
@@ -63,7 +78,7 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
             .AsNoTracking()
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Name == name, token);
-    
+
     public async Task RemoveCategory(int id, CancellationToken token = default)
     {
         var category = await _context
@@ -76,6 +91,43 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
         }
 
         _context.Categories.Remove(category);
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task<(bool Exists, string? ImageName)> GetImageName(int categoryId, CancellationToken token = default)
+    {
+        var category = await _context
+            .Categories
+            .AsNoTracking()
+            .Select(x => new { x.Id, x.Image })
+            .FirstOrDefaultAsync(x => x.Id == categoryId, token);
+
+        return (category is not null, category?.Image);
+    }
+
+    public async Task UpsertImage(int categoryId, string imageName, CancellationToken token = default)
+    {
+        var entity = await _context.Categories.FindAsync([categoryId], token);
+
+        if (entity is null)
+        {
+            return;
+        }
+        
+        entity.Image = imageName;
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task RemoveImage(int categoryId, CancellationToken token = default)
+    {
+        var entity = await _context.Categories.FindAsync([categoryId], token);
+
+        if (entity is null)
+        {
+            return;
+        }
+        
+        entity.Image = null;
         await _context.SaveChangesAsync(token);
     }
 

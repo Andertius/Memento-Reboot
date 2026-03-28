@@ -13,7 +13,7 @@ public sealed class RemoveTagFromCardEndpoint(ITagService tagService) : Endpoint
 
     public override void Configure()
     {
-        Delete(ApiPrefixes.CardsPrefix + "/{CardId}/tags/{TagId}");
+        Delete(ApiPrefixes.CardsApiPrefix + "/{CardId}/tags/{TagId}");
         Roles("Learner");
     }
 

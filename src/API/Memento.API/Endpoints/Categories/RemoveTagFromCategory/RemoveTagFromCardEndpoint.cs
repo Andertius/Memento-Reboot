@@ -13,7 +13,7 @@ public sealed class RemoveTagFromCategoryEndpoint(ITagService tagService) : Endp
 
     public override void Configure()
     {
-        Delete(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/tags/{TagId}");
+        Delete(ApiPrefixes.CategoriesApiPrefix + "/{CategoryId}/tags/{TagId}");
         Roles("Learner");
     }
 

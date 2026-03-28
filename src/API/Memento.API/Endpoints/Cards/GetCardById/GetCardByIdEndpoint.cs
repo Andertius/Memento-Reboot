@@ -13,13 +13,21 @@ public sealed class GetCardByIdEndpoint(ICardService cardService) : Endpoint<Get
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CardsPrefix + "/{Id}");
+        Get(ApiPrefixes.CardsApiPrefix + "/{Id}");
         Roles("Learner");
     }
 
     public override async Task HandleAsync(GetCardByIdRequest request, CancellationToken token)
     {
         var card = await _cardService.GetById(request.Id, token);
+
+        if (card is null)
+        {
+            await Send.NotFoundAsync(cancellation: token);
+
+            return;
+        }
+
         await Send.OkAsync(card, cancellation: token);
     }
 }

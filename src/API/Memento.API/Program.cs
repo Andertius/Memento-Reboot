@@ -2,6 +2,7 @@ using FastEndpoints;
 using FastEndpoints.Security;
 using Memento.API.Options;
 using Memento.API.Extensions;
+using Memento.API.Handlers;
 using Memento.Services.Services;
 using Memento.Infrastructure.Database;
 using Memento.Infrastructure.Repositories;
@@ -32,9 +33,16 @@ builder.Services.AddScoped<ICardRepository, CardRepository>();
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<ITagRepository, TagRepository>();
 
+builder.Services.AddScoped<IImageHandler, ImageHandler>();
+
 builder.Services.AddDbContext<CardDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 var app = builder.Build();
+
+if (app.Environment.IsEnvironment("Local"))
+{
+    app.MapOpenApi();
+}
 
 if (app.Environment.IsDevelopment())
 {
@@ -42,6 +50,7 @@ if (app.Environment.IsDevelopment())
     await app.ApplyMigrations();
 }
 
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthentication()

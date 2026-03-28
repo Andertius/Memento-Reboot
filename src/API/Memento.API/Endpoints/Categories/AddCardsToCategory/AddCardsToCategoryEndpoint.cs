@@ -13,7 +13,7 @@ public sealed class AddCardsToCategoryEndpoint(ICategoryService categoryService)
 
     public override void Configure()
     {
-        Post(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards");
+        Post(ApiPrefixes.CategoriesApiPrefix + "/{CategoryId}/cards");
         Roles("Learner");
     }
 

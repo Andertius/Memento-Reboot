@@ -13,7 +13,7 @@ public sealed class GetTagByNameEndpoint(ITagService tagService) : Endpoint<GetT
 
     public override void Configure()
     {
-        Get(ApiPrefixes.TagsPrefix + "/name/{Name}");
+        Get(ApiPrefixes.TagsApiPrefix + "/name/{Name}");
         Roles("Learner");
     }
 

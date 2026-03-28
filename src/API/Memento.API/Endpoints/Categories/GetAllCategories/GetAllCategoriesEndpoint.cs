@@ -13,7 +13,7 @@ public sealed class GetAllCategoriesEndpoint(ICategoryService categoryService) :
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CategoriesPrefix);
+        Get(ApiPrefixes.CategoriesApiPrefix);
         Roles("Learner");
     }
 

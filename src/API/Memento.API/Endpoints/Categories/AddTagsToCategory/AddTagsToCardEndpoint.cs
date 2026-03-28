@@ -13,7 +13,7 @@ public sealed class AddTagsToCategoryEndpoint(ITagService tagService) : Endpoint
 
     public override void Configure()
     {
-        Post(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/tags");
+        Post(ApiPrefixes.CategoriesApiPrefix + "/{CategoryId}/tags");
         Roles("Learner");
     }
 

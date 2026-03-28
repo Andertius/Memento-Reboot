@@ -11,10 +11,21 @@ namespace Memento.Infrastructure.Repositories;
 public interface ICardRepository
 {
     Task<CardEntity[]> GetAllCards(CancellationToken token = default);
+
     Task<int> AddCard(CardEntity entity, CancellationToken token = default);
+
     Task UpdateCard(CardEntity entity, CancellationToken token = default);
+
+    Task<(bool Exists, string? ImageName)> GetImageName(int cardId, CancellationToken token = default);
+
+    Task UpsertImage(int cardId, string imageName, CancellationToken token = default);
+
+    Task RemoveImage(int cardId, CancellationToken token = default);
+
     Task<CardEntity?> GetById(int id, CancellationToken token = default);
+
     Task RemoveCard(int id, CancellationToken token = default);
+
     Task<CardEntity[]> FetchByCategoryId(int categoryId, CancellationToken token = default);
 }
 
@@ -44,12 +55,51 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 
         _context.Cards.Add(entity);
         await _context.SaveChangesAsync(token);
+
         return entity.Id;
     }
 
     public async Task UpdateCard(CardEntity entity, CancellationToken token = default)
     {
         _context.Cards.Update(entity);
+        _context.Entry(entity).Property(x => x.Image).IsModified = false;
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task<(bool Exists, string? ImageName)> GetImageName(int cardId, CancellationToken token = default)
+    {
+        var card = await _context
+            .Cards
+            .AsNoTracking()
+            .Select(x => new { x.Id, x.Image })
+            .FirstOrDefaultAsync(x => x.Id == cardId, token);
+
+        return (card is not null, card?.Image);
+    }
+
+    public async Task UpsertImage(int cardId, string imageName, CancellationToken token = default)
+    {
+        var entity = await _context.Cards.FindAsync([cardId], token);
+
+        if (entity is null)
+        {
+            return;
+        }
+        
+        entity.Image = imageName;
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task RemoveImage(int cardId, CancellationToken token = default)
+    {
+        var entity = await _context.Cards.FindAsync([cardId], token);
+
+        if (entity is null)
+        {
+            return;
+        }
+        
+        entity.Image = null;
         await _context.SaveChangesAsync(token);
     }
 

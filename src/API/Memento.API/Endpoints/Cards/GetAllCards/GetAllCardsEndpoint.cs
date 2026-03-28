@@ -13,7 +13,7 @@ public sealed class GetAllCardsEndpoint(ICardService cardService) : EndpointWith
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CardsPrefix);
+        Get(ApiPrefixes.CardsApiPrefix);
         Roles("Learner");
     }
 

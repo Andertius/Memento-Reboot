@@ -7,8 +7,8 @@ namespace Memento.API.Endpoints.Categories.AddCategory;
 
 public sealed class AddCategoryRequest : IEntityRequest<Category>
 {
-    public string Name { get; init; } = "";
-    public string Description { get; init; } = "";
+    public required string Name { get; init; }
+    public required string Description { get; init; }
     public IReadOnlyCollection<int> TagIds { get; set; } = [];
 
     public Category ToModel() => new()

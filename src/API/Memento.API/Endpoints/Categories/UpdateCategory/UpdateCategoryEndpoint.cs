@@ -13,7 +13,7 @@ public sealed class UpdateCategoryEndpoint(ICategoryService categoryService) : E
 
     public override void Configure()
     {
-        Put(ApiPrefixes.CategoriesPrefix);
+        Put(ApiPrefixes.CategoriesApiPrefix);
         Roles("Learner");
     }
 

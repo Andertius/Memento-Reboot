@@ -3,10 +3,16 @@ namespace Memento.API.Constants;
 public static class ApiPrefixes
 {
     public const string ApiPrefix = "/api";
+        
+    public const string ImagesPrefix = "/images";
 
-    public const string CardsPrefix = $"{ApiPrefix}/cards";
+    public const string CardsApiPrefix = $"{ApiPrefix}/cards";
 
-    public const string CategoriesPrefix = $"{ApiPrefix}/categories";
+    public const string CategoriesApiPrefix = $"{ApiPrefix}/categories";
 
-    public const string TagsPrefix = $"{ApiPrefix}/tags";
+    public const string TagsApiPrefix = $"{ApiPrefix}/tags";
+
+    public const string CardsImagesPrefix = $"{ImagesPrefix}/cards";
+
+    public const string CategoriesImagesPrefix = $"{ImagesPrefix}/categories";
 }

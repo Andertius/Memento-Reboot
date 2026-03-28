@@ -14,6 +14,9 @@ services:
       ASPNETCORE_ENVIRONMENT: ${ENVIRONMENT}
       Jwt__SigningKey: ${JWT_SIGNING_KEY}
       ConnectionStrings__Database: ${API_DATABASE_CONNECTION_STRING}
+    volumes:
+      - card-image-data:/app/wwwroot/images/cards
+      - category-image-data:/app/wwwroot/images/categories
 
   memento.auth:
     image: mementoauth
@@ -56,6 +59,9 @@ services:
       - auth-data:/var/lib/postgresql
     ports:
       - "5433:5432"
+
 volumes:
+  card-image-data:
+  category-image-data:
   api-data:
   auth-data:

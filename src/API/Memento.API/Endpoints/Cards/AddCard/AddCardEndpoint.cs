@@ -14,7 +14,7 @@ public sealed class AddCardEndpoint(ICardService cardService) : Endpoint<AddCard
 
     public override void Configure()
     {
-        Post(ApiPrefixes.CardsPrefix);
+        Post(ApiPrefixes.CardsApiPrefix);
         Roles("Learner");
     }
 

@@ -14,7 +14,7 @@ public sealed class AddCategoryEndpoint(ICategoryService categoryService) : Endp
 
     public override void Configure()
     {
-        Post(ApiPrefixes.CategoriesPrefix);
+        Post(ApiPrefixes.CategoriesApiPrefix);
         Roles("Learner");
     }
 

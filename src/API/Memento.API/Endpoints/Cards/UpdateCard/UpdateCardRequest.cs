@@ -7,9 +7,9 @@ namespace Memento.API.Endpoints.Cards.UpdateCard;
 
 public sealed class UpdateCardRequest : IEntityRequest<Card>
 {
-    public int Id { get; init; }
-    public string Word { get; init; } = "";
-    public string Translation { get; init; } = "";
+    public required int Id { get; init; }
+    public required string Word { get; init; }
+    public required string Translation { get; init; }
     public string? Definition { get; init; }
     public string? Hint { get; init; }
     public IReadOnlyCollection<int> CategoryIds { get; init; } = [];

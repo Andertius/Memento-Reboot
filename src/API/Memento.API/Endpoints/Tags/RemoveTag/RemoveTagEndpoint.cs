@@ -13,7 +13,7 @@ public sealed class RemoveTagEndpoint(ITagService tagService) : Endpoint<RemoveT
 
     public override void Configure()
     {
-        Delete(ApiPrefixes.TagsPrefix + "/{Id}");
+        Delete(ApiPrefixes.TagsApiPrefix + "/{Id}");
         Roles("Learner");
     }
 

@@ -14,7 +14,7 @@ public sealed class AddTagEndpoint(ITagService tagService) : Endpoint<AddTagRequ
 
     public override void Configure()
     {
-        Post(ApiPrefixes.TagsPrefix);
+        Post(ApiPrefixes.TagsApiPrefix);
         Roles("Learner");
     }
 

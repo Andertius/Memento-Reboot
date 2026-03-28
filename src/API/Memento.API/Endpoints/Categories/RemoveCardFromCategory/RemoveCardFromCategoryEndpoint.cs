@@ -13,7 +13,7 @@ public sealed class RemoveCardFromCategoryEndpoint(ICategoryService categoryServ
 
     public override void Configure()
     {
-        Delete(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards/{CardId}");
+        Delete(ApiPrefixes.CategoriesApiPrefix + "/{CategoryId}/cards/{CardId}");
         Roles("Learner");
     }
 

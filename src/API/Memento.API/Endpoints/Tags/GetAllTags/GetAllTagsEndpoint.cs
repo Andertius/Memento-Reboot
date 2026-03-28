@@ -13,7 +13,7 @@ public sealed class GetAllTagsEndpoint(ITagService tagService) : EndpointWithout
 
     public override void Configure()
     {
-        Get(ApiPrefixes.TagsPrefix);
+        Get(ApiPrefixes.TagsApiPrefix);
         Roles("Learner");
     }
 

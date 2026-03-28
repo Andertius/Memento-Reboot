@@ -13,7 +13,7 @@ public sealed class GetCardsByCategoryIdEndpoint(ICardService cardService) : End
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CategoriesPrefix + "/{CategoryId}/cards");
+        Get(ApiPrefixes.CategoriesApiPrefix + "/{CategoryId}/cards");
         Roles("Learner");
     }
 

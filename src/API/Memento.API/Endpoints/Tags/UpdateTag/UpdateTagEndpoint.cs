@@ -13,7 +13,7 @@ public sealed class UpdateTagEndpoint(ITagService tagService) : Endpoint<UpdateT
 
     public override void Configure()
     {
-        Put(ApiPrefixes.TagsPrefix);
+        Put(ApiPrefixes.TagsApiPrefix);
         Roles("Learner");
     }
 

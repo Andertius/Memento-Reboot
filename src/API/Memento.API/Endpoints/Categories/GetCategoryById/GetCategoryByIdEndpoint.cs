@@ -13,13 +13,21 @@ public sealed class GetCategoryByIdEndpoint(ICategoryService categoryService) : 
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CategoriesPrefix + "/{Id}");
+        Get(ApiPrefixes.CategoriesApiPrefix + "/{Id}");
         Roles("Learner");
     }
 
     public override async Task HandleAsync(GetCategoryByIdRequest request, CancellationToken token)
     {
-        var card = await _categoryService.GetById(request.Id, token);
-        await Send.OkAsync(card, cancellation: token);
+        var category = await _categoryService.GetById(request.Id, token);
+
+        if (category is null)
+        {
+            await Send.NotFoundAsync(cancellation: token);
+
+            return;
+        }
+
+        await Send.OkAsync(category, cancellation: token);
     }
 }

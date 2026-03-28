@@ -21,4 +21,9 @@
     <ProjectReference Include="..\Memento.Infrastructure\Memento.Infrastructure.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="wwwroot\images\cards\" />
+    <Folder Include="wwwroot\images\categories\" />
+  </ItemGroup>
+
 </Project>

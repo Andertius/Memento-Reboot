@@ -13,7 +13,7 @@ public sealed class AddTagsToCardEndpoint(ITagService tagService) : Endpoint<Add
 
     public override void Configure()
     {
-        Post(ApiPrefixes.CardsPrefix + "/{CardId}/tags");
+        Post(ApiPrefixes.CardsApiPrefix + "/{CardId}/tags");
         Roles("Learner");
     }
 

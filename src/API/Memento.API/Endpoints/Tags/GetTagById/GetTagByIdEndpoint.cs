@@ -13,13 +13,19 @@ public sealed class GetTagByIdEndpoint(ITagService tagService) : Endpoint<GetTag
 
     public override void Configure()
     {
-        Get(ApiPrefixes.TagsPrefix + "/{Id}");
+        Get(ApiPrefixes.TagsApiPrefix + "/{Id}");
         Roles("Learner");
     }
 
     public override async Task HandleAsync(GetTagByIdRequest request, CancellationToken token)
     {
-        var tags = await _tagService.GetTagById(request.Id, token);
-        await Send.OkAsync(tags, cancellation: token);
+        var tag = await _tagService.GetTagById(request.Id, token);
+
+        if (tag is null)
+        {
+            await Send.NotFoundAsync(cancellation: token);
+        }
+
+        await Send.OkAsync(tag, cancellation: token);
     }
 }

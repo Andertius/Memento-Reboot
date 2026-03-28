@@ -13,7 +13,7 @@ public sealed class UpdateCardEndpoint(ICardService cardService) : Endpoint<Upda
 
     public override void Configure()
     {
-        Put(ApiPrefixes.CardsPrefix);
+        Put(ApiPrefixes.CardsApiPrefix);
         Roles("Learner");
     }
 

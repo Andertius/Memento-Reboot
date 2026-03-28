@@ -13,13 +13,21 @@ public sealed class GetCategoryByNameEndpoint(ICategoryService categoryService) 
 
     public override void Configure()
     {
-        Get(ApiPrefixes.CategoriesPrefix + "/name/{Name}");
+        Get(ApiPrefixes.CategoriesApiPrefix + "/name/{Name}");
         Roles("Learner");
     }
 
     public override async Task HandleAsync(GetCategoryByNameRequest request, CancellationToken token)
     {
-        var card = await _categoryService.GetByName(request.Name, token);
-        await Send.OkAsync(card, cancellation: token);
+        var category = await _categoryService.GetByName(request.Name, token);
+
+        if (category is null)
+        {
+            await Send.NotFoundAsync(cancellation: token);
+
+            return;
+        }
+
+        await Send.OkAsync(category, cancellation: token);
     }
 }
