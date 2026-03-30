@@ -23,9 +23,9 @@ public interface ICategoryService
 
     Task RemoveCategory(int id, CancellationToken token = default);
 
-    Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
-
-    Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default);
+    Task UpdateCategoryCards(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
+    
+    Task UpdateCategoryTags(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
 }
 
 public sealed class CategoryService(ICategoryRepository categoryRepository) : ICategoryService
@@ -90,9 +90,9 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     public Task RemoveCategory(int id, CancellationToken token = default)
         => _categoryRepository.RemoveCategory(id, token);
 
-    public Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default)
-        => _categoryRepository.AddCardsToCategory(categoryId, cardIds, token);
+    public Task UpdateCategoryCards(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default)
+        => _categoryRepository.UpdateCategoryCards(categoryId, cardIds, token);
 
-    public Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default)
-        => _categoryRepository.RemoveCardFromCategory(categoryId, cardId, token);
+    public Task UpdateCategoryTags(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
+        => _categoryRepository.UpdateCategoryTags(categoryId, tagIds, token);
 }

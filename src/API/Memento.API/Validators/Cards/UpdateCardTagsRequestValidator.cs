@@ -1,20 +1,18 @@
 using FastEndpoints;
 using FluentValidation;
-using Memento.API.Endpoints.Cards.AddTagsToCard;
+using Memento.API.Endpoints.Cards.UpdateCardTags;
 
 namespace Memento.API.Validators.Cards;
 
-public sealed class AddTagsToCardRequestValidator : Validator<AddTagsToCardRequest>
+public sealed class UpdateCardTagsRequestValidator : Validator<UpdateCardTagsRequest>
 {
-    public AddTagsToCardRequestValidator()
+    public UpdateCardTagsRequestValidator()
     {
         RuleFor(x => x.CardId)
             .GreaterThan(0)
             .WithMessage("Card id must be a positive integer");
 
         RuleFor(x => x.TagIds)
-            .NotEmpty()
-            .WithMessage("At least one tag must be added to a card")
             .ForEach(x => x.GreaterThan(0).WithMessage("All tag ids must be positive integers"));
     }
 }

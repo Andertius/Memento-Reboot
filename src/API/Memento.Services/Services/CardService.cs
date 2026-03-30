@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -21,6 +22,10 @@ public interface ICardService
     Task<Card?> GetById(int id, CancellationToken token = default);
 
     Task<Card[]> FetchByCategory(int categoryId, CancellationToken token = default);
+
+    Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
+
+    Task UpdateCardCategories(int cardId, IReadOnlyCollection<int> categoryIds, CancellationToken token = default);
 }
 
 public sealed class CardService(ICardRepository cardRepository) : ICardService
@@ -66,4 +71,10 @@ public sealed class CardService(ICardRepository cardRepository) : ICardService
 
         return cards.Select(_cardMapper.MapCardEntityToCard).ToArray();
     }
+
+    public Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
+        => _cardRepository.UpdateCardTags(cardId, tagIds, token);
+
+    public Task UpdateCardCategories(int cardId, IReadOnlyCollection<int> categoryIds, CancellationToken token = default)
+        => _cardRepository.UpdateCardCategories(cardId, categoryIds, token);
 }

@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Memento.API.Endpoints.Categories.AddCardsToCategory;
+namespace Memento.API.Endpoints.Categories.UpdateCategoryCards;
 
-public sealed class AddCardsToCategoryRequest
+public sealed class UpdateCategoryCardsRequest
 {
     public int CategoryId { get; init; }
     public IReadOnlyCollection<int> CardIds { get; init; } = [];

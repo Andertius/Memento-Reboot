@@ -1,8 +1,8 @@
 using System.Collections.Generic;
 
-namespace Memento.API.Endpoints.Categories.AddTagsToCategory;
+namespace Memento.API.Endpoints.Categories.UpdateCategoryTags;
 
-public sealed class AddTagsToCategoryRequest
+public sealed class UpdateCategoryTagsRequest
 {
     public int CategoryId { get; init; }
     public IReadOnlyCollection<int> TagIds { get; init; } = [];

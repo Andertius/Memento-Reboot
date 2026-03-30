@@ -17,10 +17,6 @@ public interface ITagService
     Task<int> AddTag(Tag tag, CancellationToken token = default);
     Task<bool> UpdateTag(Tag tag, CancellationToken token = default);
     Task RemoveTag(int id, CancellationToken token = default);
-    Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
-    Task RemoveTagFromCard(int tagId, int cardId, CancellationToken token = default);
-    Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
-    Task RemoveTagFromCategory(int tagId, int categoryId, CancellationToken token = default);
 }
 
 public sealed class TagService(ITagRepository tagRepository) : ITagService
@@ -82,16 +78,4 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
 
     public Task RemoveTag(int id, CancellationToken token = default)
         => _tagRepository.RemoveTag(id, token);
-
-    public Task AddTagsToCard(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
-        => _tagRepository.AddTagsToCard(cardId, tagIds, token);
-
-    public Task RemoveTagFromCard(int tagId, int cardId, CancellationToken token = default)
-        => _tagRepository.RemoveTagFromCard(tagId, cardId, token);
-
-    public Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
-        => _tagRepository.AddTagsToCategory(categoryId, tagIds, token);
-
-    public Task RemoveTagFromCategory(int tagId, int categoryId, CancellationToken token = default)
-        => _tagRepository.RemoveTagFromCategory(tagId, categoryId, token);
 }

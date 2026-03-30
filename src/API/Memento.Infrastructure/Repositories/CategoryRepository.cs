@@ -29,9 +29,9 @@ public interface ICategoryRepository
 
     Task RemoveCategory(int id, CancellationToken token = default);
 
-    Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
+    Task UpdateCategoryCards(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default);
 
-    Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default);
+    Task UpdateCategoryTags(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
 }
 
 public sealed class CategoryRepository(CardDbContext context) : ICategoryRepository
@@ -131,49 +131,43 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
         await _context.SaveChangesAsync(token);
     }
 
-    public async Task AddCardsToCategory(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default)
+    public async Task UpdateCategoryCards(int categoryId, IReadOnlyCollection<int> cardIds, CancellationToken token = default)
     {
-        var categoryEntity = await _context.Categories.FindAsync([categoryId], token);
+        var categoryEntity = await _context
+            .Categories
+            .Include(x => x.Cards)
+            .FirstOrDefaultAsync(x => x.Id == categoryId, token);
 
         if (categoryEntity is null)
         {
             return;
         }
 
-        var cardEntities = await _context
+        categoryEntity.Cards = await _context
             .Cards
-            .Include(x => x.Categories)
             .Where(x => cardIds.Contains(x.Id))
-            .ToArrayAsync(token);
-
-        foreach (var card in cardEntities)
-        {
-            card.Categories.Add(categoryEntity);
-        }
+            .ToListAsync(token);
 
         await _context.SaveChangesAsync(token);
     }
 
-    public async Task RemoveCardFromCategory(int categoryId, int cardId, CancellationToken token = default)
+    public async Task UpdateCategoryTags(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
     {
-        var categoryEntity = await _context.Categories.FindAsync([categoryId], token);
+        var categoryEntity = await _context
+            .Categories
+            .Include(x => x.Tags)
+            .FirstOrDefaultAsync(x => x.Id == categoryId, token);
 
         if (categoryEntity is null)
         {
             return;
         }
 
-        var cardEntity = await _context
-            .Cards
-            .Include(x => x.Categories)
-            .FirstOrDefaultAsync(x => cardId == x.Id, token);
+        categoryEntity.Tags = await _context
+            .Tags
+            .Where(x => tagIds.Contains(x.Id))
+            .ToListAsync(token);
 
-        if (cardEntity is null)
-        {
-            return;
-        }
-
-        cardEntity.Categories.Remove(categoryEntity);
         await _context.SaveChangesAsync(token);
     }
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,6 +26,10 @@ public interface ICardRepository
     Task<CardEntity?> GetById(int id, CancellationToken token = default);
 
     Task RemoveCard(int id, CancellationToken token = default);
+
+    Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
+
+    Task UpdateCardCategories(int cardId, IReadOnlyCollection<int> categoryIds, CancellationToken token = default);
 
     Task<CardEntity[]> FetchByCategoryId(int categoryId, CancellationToken token = default);
 }
@@ -61,8 +66,8 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 
     public async Task UpdateCard(CardEntity entity, CancellationToken token = default)
     {
-        _context.Cards.Update(entity);
-        _context.Entry(entity).Property(x => x.Image).IsModified = false;
+        var entry = _context.Cards.Update(entity);
+        entry.Property(x => x.Image).IsModified = false;
         await _context.SaveChangesAsync(token);
     }
 
@@ -85,7 +90,7 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
         {
             return;
         }
-        
+
         entity.Image = imageName;
         await _context.SaveChangesAsync(token);
     }
@@ -98,7 +103,7 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
         {
             return;
         }
-        
+
         entity.Image = null;
         await _context.SaveChangesAsync(token);
     }
@@ -123,6 +128,46 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
         }
 
         _context.Cards.Remove(card);
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
+    {
+        var cardEntity = await _context
+            .Cards
+            .Include(x => x.Tags)
+            .FirstOrDefaultAsync(x => x.Id == cardId, token);
+
+        if (cardEntity is null)
+        {
+            return;
+        }
+
+        cardEntity.Tags = await _context
+            .Tags
+            .Where(x => tagIds.Contains(x.Id))
+            .ToListAsync(token);
+
+        await _context.SaveChangesAsync(token);
+    }
+
+    public async Task UpdateCardCategories(int cardId, IReadOnlyCollection<int> categoryIds, CancellationToken token = default)
+    {
+        var cardEntity = await _context
+            .Cards
+            .Include(x => x.Categories)
+            .FirstOrDefaultAsync(x => x.Id == cardId, token);
+
+        if (cardEntity is null)
+        {
+            return;
+        }
+
+        cardEntity.Categories = await _context
+            .Categories
+            .Where(x => categoryIds.Contains(x.Id))
+            .ToListAsync(token);
+
         await _context.SaveChangesAsync(token);
     }
 
