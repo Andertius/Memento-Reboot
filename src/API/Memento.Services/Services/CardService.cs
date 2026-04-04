@@ -12,6 +12,8 @@ namespace Memento.Services.Services;
 public interface ICardService
 {
     Task<Card[]> GetAllCards(CancellationToken token = default);
+    
+    Task<Card[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default);
 
     Task<int> AddCard(Card card, CancellationToken token = default);
 
@@ -20,8 +22,6 @@ public interface ICardService
     Task RemoveCard(int id, CancellationToken token = default);
 
     Task<Card?> GetById(int id, CancellationToken token = default);
-
-    Task<Card[]> FetchByCategory(int categoryId, CancellationToken token = default);
 
     Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
 
@@ -36,6 +36,13 @@ public sealed class CardService(ICardRepository cardRepository) : ICardService
     public async Task<Card[]> GetAllCards(CancellationToken token = default)
     {
         var cards = await _cardRepository.GetAllCards(token);
+
+        return cards.Select(_cardMapper.MapCardEntityToCard).ToArray();
+    }
+
+    public async Task<Card[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default)
+    {
+        var cards = await _cardRepository.GetCards(categoryId, tagIds, token);
 
         return cards.Select(_cardMapper.MapCardEntityToCard).ToArray();
     }
@@ -63,13 +70,6 @@ public sealed class CardService(ICardRepository cardRepository) : ICardService
         return card is null
             ? null
             : _cardMapper.MapCardEntityToCard(card);
-    }
-
-    public async Task<Card[]> FetchByCategory(int categoryId, CancellationToken token = default)
-    {
-        var cards = await _cardRepository.FetchByCategoryId(categoryId, token);
-
-        return cards.Select(_cardMapper.MapCardEntityToCard).ToArray();
     }
 
     public Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)

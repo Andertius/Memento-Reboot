@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Memento.Infrastructure.Database;
 using Memento.Infrastructure.Entities;
+using Memento.Infrastructure.Extenstions;
 using Microsoft.EntityFrameworkCore;
 
 namespace Memento.Infrastructure.Repositories;
@@ -12,6 +13,8 @@ namespace Memento.Infrastructure.Repositories;
 public interface ICardRepository
 {
     Task<CardEntity[]> GetAllCards(CancellationToken token = default);
+
+    Task<CardEntity[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default);
 
     Task<int> AddCard(CardEntity entity, CancellationToken token = default);
 
@@ -30,8 +33,6 @@ public interface ICardRepository
     Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default);
 
     Task UpdateCardCategories(int cardId, IReadOnlyCollection<int> categoryIds, CancellationToken token = default);
-
-    Task<CardEntity[]> FetchByCategoryId(int categoryId, CancellationToken token = default);
 }
 
 public sealed class CardRepository(CardDbContext context) : ICardRepository
@@ -44,6 +45,15 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
             .AsNoTracking()
             .Include(x => x.Categories)
             .Include(x => x.Tags)
+            .ToArrayAsync(token);
+
+    public Task<CardEntity[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default)
+        => _context
+            .Cards
+            .AsNoTracking()
+            .Include(x => x.Tags)
+            .ApplyCategoryFilter(categoryId)
+            .ApplyTagsFilter(tagIds)
             .ToArrayAsync(token);
 
     public async Task<int> AddCard(CardEntity entity, CancellationToken token = default)
@@ -170,13 +180,4 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 
         await _context.SaveChangesAsync(token);
     }
-
-    public Task<CardEntity[]> FetchByCategoryId(int categoryId, CancellationToken token = default)
-        => _context
-            .Cards
-            .AsNoTracking()
-            .Include(x => x.Categories)
-            .Include(x => x.Tags)
-            .Where(x => x.Categories.Select(y => y.Id).Contains(categoryId))
-            .ToArrayAsync(token);
 }
