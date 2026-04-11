@@ -11,6 +11,7 @@
   <Folder Name="/_solutionitems/">
     <File Path=".gitignore" />
     <File Path="scripts\add-migration.sh" />
+    <File Path="scripts\deploy-to-prod.sh" />
     <File Path="scripts\remove-migration.sh" />
     <File Path="scripts\run.sh" />
   </Folder>

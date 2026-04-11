@@ -1,23 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using FastEndpoints;
-using Memento.Auth.Options;
+using FastEndpoints.Security;
+using Memento.Auth.Services;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Options;
-using Microsoft.IdentityModel.JsonWebTokens;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Memento.Auth.Endpoints.Token;
 
-public sealed class TokenEndpoint(UserManager<IdentityUser> userManager, IOptions<JwtOptions> jwtOptions) : Endpoint<TokenRequest, TokenResponse>
+public sealed class TokenEndpoint(UserManager<IdentityUser> userManager) : Endpoint<TokenRequest, TokenResponse>
 {
     private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "User manager must not be null");
-    private readonly JwtOptions _jwtOptions = jwtOptions.Value;
 
     public override void Configure()
     {
@@ -37,27 +30,11 @@ public sealed class TokenEndpoint(UserManager<IdentityUser> userManager, IOption
 
         var roles = await _userManager.GetRolesAsync(user);
 
-        var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.SigningKey));
-        var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-        List<Claim> claims =
-        [
-            new(JwtRegisteredClaimNames.Sub, user.Id),
-            ..roles.Select(x => new Claim("role", x)),
-        ];
-
-        var tokenDescriptor = new SecurityTokenDescriptor
+        Response = await CreateTokenWith<TokenService>(user.Id, u =>
         {
-            Issuer = _jwtOptions.Issuer,
-            Audience = _jwtOptions.Audience,
-            Expires = DateTime.UtcNow.AddMinutes(_jwtOptions.ExpirationInMinutes),
-            SigningCredentials = credentials,
-            Subject = new ClaimsIdentity(claims),
-        };
+            u.Roles.AddRange(roles);
+        });
 
-        var handler = new JsonWebTokenHandler();
-        string accessToken = handler.CreateToken(tokenDescriptor);
-
-        await Send.OkAsync(new TokenResponse { AccessToken = accessToken }, cancellation: token);
+        await Send.OkAsync(Response, cancellation: token);
     }
 }

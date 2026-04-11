@@ -1,7 +1,9 @@
 using FastEndpoints;
+using FastEndpoints.Swagger;
 using Memento.Auth.Database;
 using Memento.Auth.Extensions;
 using Memento.Auth.Options;
+using Memento.Auth.Repositories;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -15,7 +17,9 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddFastEndpoints();
+builder.Services.AddFastEndpoints()
+    .SwaggerDocument();
+
 builder.Services.AddAuthorization();
 builder.Services
     .AddAuthentication(IdentityConstants.BearerScheme)
@@ -26,6 +30,8 @@ builder.Services
     .AddEntityFrameworkStores<AuthorizationDbContext>();
 
 builder.Services.AddDbContext<AuthorizationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
+
+builder.Services.AddScoped<ITokenRepository, TokenRepository>();
 
 builder.Services.Configure<IdentityOptions>(options =>
 {
@@ -44,10 +50,11 @@ var app = builder.Build();
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    await app.ApplyMigrations();
 }
 
 app.UseHttpsRedirection();
-app.UseFastEndpoints();
+app.UseFastEndpoints()
+    .UseSwaggerGen();
 
+await app.ApplyMigrations();
 app.Run();

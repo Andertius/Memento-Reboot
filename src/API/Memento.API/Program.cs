@@ -43,15 +43,9 @@ builder.Services.AddDbContext<CardDbContext>(options => options.UseNpgsql(builde
 
 var app = builder.Build();
 
-if (app.Environment.IsEnvironment("Local"))
-{
-    app.MapOpenApi();
-}
-
 if (app.Environment.IsDevelopment())
 {
     app.MapOpenApi();
-    await app.ApplyMigrations();
 }
 
 app.UseStaticFiles();
@@ -61,4 +55,5 @@ app.UseAuthentication()
    .UseAuthorization()
    .UseFastEndpoints();
 
+await app.ApplyMigrations();
 app.Run();
