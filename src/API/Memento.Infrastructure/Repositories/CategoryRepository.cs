@@ -79,20 +79,8 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Name == name, token);
 
-    public async Task RemoveCategory(int id, CancellationToken token = default)
-    {
-        var category = await _context
-            .Categories
-            .FindAsync([id], token);
-
-        if (category is null)
-        {
-            return;
-        }
-
-        _context.Categories.Remove(category);
-        await _context.SaveChangesAsync(token);
-    }
+    public Task RemoveCategory(int id, CancellationToken token = default)
+        => _context.Categories.Where(x => x.Id == id).ExecuteDeleteAsync(token);
 
     public async Task<(bool Exists, string? ImageName)> GetImageName(int categoryId, CancellationToken token = default)
     {

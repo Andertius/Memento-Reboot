@@ -126,20 +126,8 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
             .Include(x => x.Tags)
             .FirstOrDefaultAsync(x => x.Id == id, token);
 
-    public async Task RemoveCard(int id, CancellationToken token = default)
-    {
-        var card = await _context
-            .Cards
-            .FindAsync([id], token);
-
-        if (card is null)
-        {
-            return;
-        }
-
-        _context.Cards.Remove(card);
-        await _context.SaveChangesAsync(token);
-    }
+    public Task RemoveCard(int id, CancellationToken token = default)
+        => _context.Cards.Where(x => x.Id == id).ExecuteDeleteAsync(token);
 
     public async Task UpdateCardTags(int cardId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
     {

@@ -15,6 +15,7 @@ namespace Memento.Auth.Tests.Integration.CreateUser;
 public sealed class CreateUserEndpointTests : TestBase<AuthApp>
 {
     private readonly AuthApp _app;
+    private readonly IServiceScope _scope;
     private readonly DataSeeder _seeder;
     private readonly AuthorizationDbContext _dbContext;
 
@@ -22,13 +23,13 @@ public sealed class CreateUserEndpointTests : TestBase<AuthApp>
     {
         _app = app;
 
-        var scope = app.Services.CreateScope();
-        _dbContext = scope.ServiceProvider.GetRequiredService<AuthorizationDbContext>();
+        _scope = app.Services.CreateScope();
+        _dbContext = _scope.ServiceProvider.GetRequiredService<AuthorizationDbContext>();
 
         _seeder = new DataSeeder(
             _dbContext,
-            scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>(),
-            scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>());
+            _scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>(),
+            _scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>());
     }
 
     [Fact]
@@ -81,5 +82,9 @@ public sealed class CreateUserEndpointTests : TestBase<AuthApp>
     }
 
     protected override async ValueTask TearDownAsync()
-        => await _seeder.UnseedAsync();
+    {
+        await _seeder.UnseedAsync();
+        _scope.Dispose();
+        await _dbContext.DisposeAsync();
+    }
 }

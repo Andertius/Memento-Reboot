@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace Memento.Auth.Endpoints.Token;
 
-public sealed class TokenEndpoint(UserManager<IdentityUser> userManager) : Endpoint<TokenRequest, TokenResponse>
+public sealed class AccessTokenEndpoint(UserManager<IdentityUser> userManager) : Endpoint<TokenRequest, TokenResponse>
 {
     private readonly UserManager<IdentityUser> _userManager = userManager ?? throw new ArgumentNullException(nameof(userManager), "User manager must not be null");
 

@@ -64,20 +64,8 @@ public sealed class TagRepository(CardDbContext context) : ITagRepository
             .AsNoTracking()
             .FirstOrDefaultAsync(x => x.Name == name, token);
 
-    public async Task RemoveTag(int id, CancellationToken token = default)
-    {
-        var tag = await _context
-            .Tags
-            .FindAsync([id], token);
-
-        if (tag is null)
-        {
-            return;
-        }
-
-        _context.Tags.Remove(tag);
-        await _context.SaveChangesAsync(token);
-    }
+    public Task RemoveTag(int id, CancellationToken token = default)
+        => _context.Tags.Where(x => x.Id == id).ExecuteDeleteAsync(token);
 
     public async Task AddTagsToCategory(int categoryId, IReadOnlyCollection<int> tagIds, CancellationToken token = default)
     {

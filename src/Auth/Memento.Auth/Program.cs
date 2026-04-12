@@ -1,3 +1,4 @@
+using System;
 using FastEndpoints;
 using FastEndpoints.Swagger;
 using Memento.Auth.Database;
@@ -17,7 +18,8 @@ builder.Configuration.AddEnvironmentVariables();
 
 builder.Services.AddOpenApi();
 
-builder.Services.AddFastEndpoints()
+builder.Services
+    .AddFastEndpoints()
     .SwaggerDocument();
 
 builder.Services.AddAuthorization();
@@ -32,6 +34,7 @@ builder.Services
 builder.Services.AddDbContext<AuthorizationDbContext>(options => options.UseNpgsql(builder.Configuration.GetConnectionString("Database")));
 
 builder.Services.AddScoped<ITokenRepository, TokenRepository>();
+builder.Services.AddSingleton<TimeProvider>(_ => TimeProvider.System);
 
 builder.Services.Configure<IdentityOptions>(options =>
 {

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using FastEndpoints.Testing;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Time.Testing;
 using Testcontainers.PostgreSql;
 
 namespace Memento.Auth.Tests.Integration;
@@ -24,6 +26,7 @@ public sealed class AuthApp : AppFixture<Program>
     protected override void ConfigureServices(IServiceCollection services)
     {
         services.AddDbContext<AuthorizationDbContext>(opts => opts.UseNpgsql(_databaseContainer.GetConnectionString()));
+        services.AddSingleton<TimeProvider, FakeTimeProvider>();
     }
 
     protected override void ConfigureApp(IWebHostBuilder app)
