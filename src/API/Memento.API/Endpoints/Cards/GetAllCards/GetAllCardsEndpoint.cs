@@ -7,7 +7,7 @@ using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Cards.GetAllCards;
 
-public sealed class GetAllCardsEndpoint(ICardService cardService) : EndpointWithoutRequest
+public sealed class GetAllCardsEndpoint(ICardService cardService) : Endpoint<GetAllCardsRequest>
 {
     private readonly ICardService _cardService = cardService ?? throw new ArgumentNullException(nameof(cardService), "Card Service must not be null");
 
@@ -17,9 +17,9 @@ public sealed class GetAllCardsEndpoint(ICardService cardService) : EndpointWith
         Roles("Learner");
     }
 
-    public override async Task HandleAsync(CancellationToken token)
+    public override async Task HandleAsync(GetAllCardsRequest request, CancellationToken token)
     {
-        var cards = await _cardService.GetAllCards(token);
+        var cards = await _cardService.GetAllCards(request.Filter, request.Take, request.Skip, token);
         await Send.OkAsync(cards, cancellation: token);
     }
 }

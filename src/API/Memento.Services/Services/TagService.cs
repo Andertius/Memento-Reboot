@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,7 +10,7 @@ namespace Memento.Services.Services;
 
 public interface ITagService
 {
-    Task<Tag[]> GetAllTags(CancellationToken token = default);
+    Task<Tag[]> GetAllTags(string? filter, int? take, int? skip, CancellationToken token = default);
     Task<Tag?> GetTagById(int id, CancellationToken token = default);
     Task<Tag?> GetTagByName(string name, CancellationToken token = default);
     Task<int> AddTag(Tag tag, CancellationToken token = default);
@@ -24,9 +23,9 @@ public sealed class TagService(ITagRepository tagRepository) : ITagService
     private readonly ITagRepository _tagRepository = tagRepository ?? throw new ArgumentNullException(nameof(tagRepository), "Tag Repository must not be null");
     private readonly TagMapper _tagMapper = new();
 
-    public async Task<Tag[]> GetAllTags(CancellationToken token = default)
+    public async Task<Tag[]> GetAllTags(string? filter, int? take, int? skip, CancellationToken token = default)
     {
-        var cards = await _tagRepository.GetAllTags(token);
+        var cards = await _tagRepository.GetAllTags(filter, take, skip, token);
         return cards.Select(_tagMapper.MapTagEntityToTag).ToArray();
     }
 

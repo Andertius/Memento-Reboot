@@ -11,7 +11,7 @@ namespace Memento.Infrastructure.Repositories;
 
 public interface ITagRepository
 {
-    Task<TagEntity[]> GetAllTags(CancellationToken token = default);
+    Task<TagEntity[]> GetAllTags(string? filter, int? take, int? skip, CancellationToken token = default);
 
     Task<int> AddTag(TagEntity entity, CancellationToken token = default);
 
@@ -32,11 +32,29 @@ public sealed class TagRepository(CardDbContext context) : ITagRepository
 {
     private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
-    public Task<TagEntity[]> GetAllTags(CancellationToken token = default)
-        => _context
+    public async Task<TagEntity[]> GetAllTags(string? filter, int? take, int? skip, CancellationToken token = default)
+    {
+        var queryable = _context
             .Tags
-            .AsNoTracking()
-            .ToArrayAsync(token);
+            .AsNoTracking();
+
+        if (!String.IsNullOrWhiteSpace(filter))
+        {
+            queryable = queryable.Where(x => x.Name != null && x.Name.ToLower().Contains(filter.ToLower()));
+        }
+
+        if (skip.HasValue)
+        {
+            queryable = queryable.Skip(skip.Value);
+        }
+
+        if (take.HasValue)
+        {
+            queryable = queryable.Take(take.Value);
+        }
+
+        return await queryable.ToArrayAsync(token);
+    }
 
     public async Task<int> AddTag(TagEntity entity, CancellationToken token = default)
     {

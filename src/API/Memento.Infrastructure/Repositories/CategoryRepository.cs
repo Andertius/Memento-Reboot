@@ -11,7 +11,7 @@ namespace Memento.Infrastructure.Repositories;
 
 public interface ICategoryRepository
 {
-    Task<CategoryEntity[]> GetAllCategories(CancellationToken token = default);
+    Task<CategoryEntity[]> GetAllCategories(string? filter, int? take, int? skip, CancellationToken token = default);
 
     Task<int> AddCategory(CategoryEntity entity, CancellationToken token = default);
 
@@ -38,12 +38,33 @@ public sealed class CategoryRepository(CardDbContext context) : ICategoryReposit
 {
     private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
-    public Task<CategoryEntity[]> GetAllCategories(CancellationToken token = default)
-        => _context
+    public async Task<CategoryEntity[]> GetAllCategories(string? filter, int? take, int? skip, CancellationToken token = default)
+    {
+        var queryable = _context
             .Categories
-            .AsNoTracking()
+            .AsNoTracking();
+
+        if (!String.IsNullOrWhiteSpace(filter))
+        {
+            queryable = queryable.Where(x => x.Name != null && x.Name.ToLower().Contains(filter.ToLower()));
+        }
+
+        if (skip.HasValue)
+        {
+            queryable = queryable.Skip(skip.Value);
+        }
+
+        if (take.HasValue)
+        {
+            queryable = queryable.Take(take.Value);
+        }
+
+        var str = queryable.ToQueryString();
+
+        return await queryable
             .Include(x => x.Tags)
             .ToArrayAsync(token);
+    }
 
     public async Task<int> AddCategory(CategoryEntity entity, CancellationToken token = default)
     {

@@ -7,7 +7,7 @@ using Memento.Services.Services;
 
 namespace Memento.API.Endpoints.Categories.GetAllCategories;
 
-public sealed class GetAllCategoriesEndpoint(ICategoryService categoryService) : EndpointWithoutRequest
+public sealed class GetAllCategoriesEndpoint(ICategoryService categoryService) : Endpoint<GetAllCategoriesRequest>
 {
     private readonly ICategoryService _categoryService = categoryService ?? throw new ArgumentNullException(nameof(categoryService), "Category Service must not be null");
 
@@ -17,9 +17,9 @@ public sealed class GetAllCategoriesEndpoint(ICategoryService categoryService) :
         Roles("Learner");
     }
 
-    public override async Task HandleAsync(CancellationToken token)
+    public override async Task HandleAsync(GetAllCategoriesRequest request, CancellationToken token)
     {
-        var categories = await _categoryService.GetAllCategories(token);
+        var categories = await _categoryService.GetAllCategories(request.Filter, request.Take, request.Skip, token);
         await Send.OkAsync(categories, cancellation: token);
     }
 }

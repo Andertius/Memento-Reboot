@@ -12,7 +12,7 @@ namespace Memento.Infrastructure.Repositories;
 
 public interface ICardRepository
 {
-    Task<CardEntity[]> GetAllCards(CancellationToken token = default);
+    Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default);
 
     Task<CardEntity[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default);
 
@@ -39,13 +39,32 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 {
     private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
-    public Task<CardEntity[]> GetAllCards(CancellationToken token = default)
-        => _context
+    public async Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default)
+    {
+        var queryable = _context
             .Cards
-            .AsNoTracking()
+            .AsNoTracking();
+
+        if (!String.IsNullOrWhiteSpace(filter))
+        {
+            queryable = queryable.Where(x => x.Word != null && x.Word.ToLower().Contains(filter.ToLower()) || x.Translation != null && x.Translation.ToLower().Contains(filter.ToLower()));
+        }
+
+        if (skip.HasValue)
+        {
+            queryable = queryable.Skip(skip.Value);
+        }
+
+        if (take.HasValue)
+        {
+            queryable = queryable.Take(take.Value);
+        }
+
+        return await queryable
             .Include(x => x.Categories)
             .Include(x => x.Tags)
             .ToArrayAsync(token);
+    }
 
     public Task<CardEntity[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default)
         => _context

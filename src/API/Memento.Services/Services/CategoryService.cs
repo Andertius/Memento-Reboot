@@ -11,7 +11,7 @@ namespace Memento.Services.Services;
 
 public interface ICategoryService
 {
-    Task<Category[]> GetAllCategories(CancellationToken token = default);
+    Task<Category[]> GetAllCategories(string? filter, int? take, int? skip, CancellationToken token = default);
 
     Task<int> AddCategory(Category category, CancellationToken token = default);
 
@@ -33,9 +33,9 @@ public sealed class CategoryService(ICategoryRepository categoryRepository) : IC
     private readonly ICategoryRepository _categoryRepository = categoryRepository ?? throw new ArgumentNullException(nameof(categoryRepository), "Category Repository must not be null");
     private readonly CategoryMapper _categoryMapper = new();
 
-    public async Task<Category[]> GetAllCategories(CancellationToken token = default)
+    public async Task<Category[]> GetAllCategories(string? filter, int? take, int? skip, CancellationToken token = default)
     {
-        var cards = await _categoryRepository.GetAllCategories(token);
+        var cards = await _categoryRepository.GetAllCategories(filter, take, skip, token);
 
         return cards.Select(_categoryMapper.MapCategoryEntityToCategory).ToArray();
     }

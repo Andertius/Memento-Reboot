@@ -11,7 +11,7 @@ namespace Memento.Services.Services;
 
 public interface ICardService
 {
-    Task<Card[]> GetAllCards(CancellationToken token = default);
+    Task<Card[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default);
     
     Task<Card[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default);
 
@@ -33,9 +33,9 @@ public sealed class CardService(ICardRepository cardRepository) : ICardService
     private readonly ICardRepository _cardRepository = cardRepository ?? throw new ArgumentNullException(nameof(cardRepository), "Card Repository must not be null");
     private readonly CardMapper _cardMapper = new();
 
-    public async Task<Card[]> GetAllCards(CancellationToken token = default)
+    public async Task<Card[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default)
     {
-        var cards = await _cardRepository.GetAllCards(token);
+        var cards = await _cardRepository.GetAllCards(filter, take, skip, token);
 
         return cards.Select(_cardMapper.MapCardEntityToCard).ToArray();
     }

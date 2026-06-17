@@ -23,12 +23,12 @@ public sealed class CategoryServiceGetAllCategoriesTests
         };
 
         var repository = A.Fake<ICategoryRepository>();
-        A.CallTo(() => repository.GetAllCategories()).Returns([categoryEntity]);
+        A.CallTo(() => repository.GetAllCategories(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored)).Returns([categoryEntity]);
 
         var sevice = new CategoryService(repository);
 
         // Act
-        var categories = await sevice.GetAllCategories(CancellationToken.None);
+        var categories = await sevice.GetAllCategories(null, 0, 0, CancellationToken.None);
 
         // Assert
         var category = Assert.Single(categories);
@@ -43,12 +43,12 @@ public sealed class CategoryServiceGetAllCategoriesTests
     {
         // Arrange
         var repository = A.Fake<ICategoryRepository>();
-        A.CallTo(() => repository.GetAllCategories()).Returns([]);
+        A.CallTo(() => repository.GetAllCategories(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored)).Returns([]);
 
         var sevice = new CategoryService(repository);
 
         // Act
-        var cartegories = await sevice.GetAllCategories(CancellationToken.None);
+        var cartegories = await sevice.GetAllCategories(null, 0, 0, CancellationToken.None);
 
         // Assert
         Assert.Empty(cartegories);
