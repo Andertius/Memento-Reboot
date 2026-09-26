@@ -12,7 +12,7 @@ namespace Memento.Infrastructure.Repositories;
 
 public interface ICardRepository
 {
-    Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default);
+    Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, ICollection<int> categoryIds, ICollection<int> tagIds, CancellationToken token = default);
 
     Task<CardEntity[]> GetCards(int categoryId = 0, IReadOnlyCollection<int>? tagIds = null, CancellationToken token = default);
 
@@ -39,7 +39,7 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 {
     private readonly CardDbContext _context = context ?? throw new ArgumentNullException(nameof(context), "Card DbContext must not be null");
 
-    public async Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, CancellationToken token = default)
+    public async Task<CardEntity[]> GetAllCards(string? filter, int? take, int? skip, ICollection<int> categoryIds, ICollection<int> tagIds, CancellationToken token = default)
     {
         var queryable = _context
             .Cards
@@ -47,7 +47,19 @@ public sealed class CardRepository(CardDbContext context) : ICardRepository
 
         if (!String.IsNullOrWhiteSpace(filter))
         {
-            queryable = queryable.Where(x => x.Word != null && x.Word.ToLower().Contains(filter.ToLower()) || x.Translation != null && x.Translation.ToLower().Contains(filter.ToLower()));
+            queryable = queryable.Where(x =>
+                x.Word != null && x.Word.ToLower().Contains(filter.ToLower()) ||
+                x.Translation != null && x.Translation.ToLower().Contains(filter.ToLower()));
+        }
+
+        if (categoryIds.Count != 0)
+        {
+            queryable = queryable.Where(x => x.Categories.Select(x => x.Id).Intersect(categoryIds).Any());
+        }
+
+        if (tagIds.Count != 0)
+        {
+            queryable = queryable.Where(x => x.Tags.Select(x => x.Id).Intersect(tagIds).Any());
         }
 
         if (skip.HasValue)

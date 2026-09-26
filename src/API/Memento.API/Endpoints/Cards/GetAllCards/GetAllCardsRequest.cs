@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+
 namespace Memento.API.Endpoints.Cards.GetAllCards;
 
 public sealed class GetAllCardsRequest
@@ -7,4 +9,8 @@ public sealed class GetAllCardsRequest
     public int? Skip { get; set; }
 
     public string? Filter { get; set; }
+
+    public ICollection<int> CategoryIds { get; set; } = [];
+
+    public ICollection<int> TagIds { get; set; } = [];
 }

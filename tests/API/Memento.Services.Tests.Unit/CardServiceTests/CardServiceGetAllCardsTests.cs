@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using FakeItEasy;
@@ -25,12 +26,12 @@ public sealed class CardServiceGetAllCardsTests
         };
 
         var repository = A.Fake<ICardRepository>();
-        A.CallTo(() => repository.GetAllCards(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored)).Returns([cardEntity]);
+        A.CallTo(() => repository.GetAllCards(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored, An<ICollection<int>>.Ignored, An<ICollection<int>>.Ignored)).Returns([cardEntity]);
 
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards(null, 0, 0, CancellationToken.None);
+        var cards = await sevice.GetAllCards(null, 0, 0, [], [], CancellationToken.None);
 
         // Assert
         var card = Assert.Single(cards);
@@ -47,12 +48,12 @@ public sealed class CardServiceGetAllCardsTests
     {
         // Arrange
         var repository = A.Fake<ICardRepository>();
-        A.CallTo(() => repository.GetAllCards(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored)).Returns([]);
+        A.CallTo(() => repository.GetAllCards(A<string>.Ignored, An<int>.Ignored, An<int>.Ignored, An<ICollection<int>>.Ignored, An<ICollection<int>>.Ignored)).Returns([]);
 
         var sevice = new CardService(repository);
 
         // Act
-        var cards = await sevice.GetAllCards(null, 0, 0, CancellationToken.None);
+        var cards = await sevice.GetAllCards(null, 0, 0, [], [], CancellationToken.None);
 
         // Assert
         Assert.Empty(cards);
